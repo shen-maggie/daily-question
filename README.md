@@ -1,20 +1,27 @@
-# Daily Question
+# Sidequest (working title)
 
-A Discord bot that helps friend groups stay in touch by giving them one small,
-shared ritual: a daily question, a place to answer, and a recap of the group's
-conversation.
+An installable, mobile-first daily question app that helps friend groups stay
+in touch. The daily question is global; answers, reveals, and discussion prompts
+are private to each friend group. Discord and Messages bring the conversation
+back to the chat people already use.
+
+## Current Prototype
+
+Open `dist/index.html` or serve the `dist` directory locally. The prototype
+includes today's global question, answer-before-reveal, realistic friend
+responses, a group streak, and native sharing back to a group chat.
 
 ## Hackathon MVP
 
 The demo should prove one complete loop:
 
-1. An admin runs `/setup` to choose a Discord channel.
-2. The bot posts a daily question and opens a thread.
-3. Friends answer in the thread.
-4. `/recap` summarizes the group's answers.
-5. `/streak` shows how many days the group has participated.
+1. A friend opens the global daily question from the app or group-chat reminder.
+2. They answer without seeing friends' responses.
+3. Their private group responses are revealed.
+4. The app creates a follow-up designed to start a conversation.
+5. They share it back to Messages or Discord.
 
-Themes, anonymous polls, worldwide questions, and a web dashboard are stretch
+Themes, anonymous polls, public responses, and journaling tools are stretch
 goals. The default experience should work without choosing a theme.
 
 ## Team Ownership

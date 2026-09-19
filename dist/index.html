@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f5f2eb" />
+    <meta
+      name="description"
+      content="A daily question you answer privately, reveal together, and discuss with friends."
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1c1a'/%3E%3Cpath d='M18 18h28v20H31l-9 8v-8h-4z' fill='%23f3ff73'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>Sidequest - Today's question</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Sidequest home">
+          <span class="brand-mark" aria-hidden="true">S</span>
+          <span>sidequest</span>
+        </a>
+        <button class="group-switcher" type="button" aria-label="Switch group">
+          <span class="group-avatars" aria-hidden="true">
+            <span>SG</span><span>JK</span><span>AM</span>
+          </span>
+          <span>The roommates</span>
+          <span aria-hidden="true">⌄</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="today-layout" aria-labelledby="question-heading">
+          <div class="question-column">
+            <div class="question-meta">
+              <span>Question 001</span>
+              <span>September 19</span>
+            </div>
+
+            <h1 id="question-heading">
+              What is something you want the group to make time for this fall?
+            </h1>
+
+            <div class="status-row" aria-label="Group participation">
+              <div class="response-faces" aria-hidden="true">
+                <span class="face face-yellow">J</span>
+                <span class="face face-blue">A</span>
+                <span class="face face-pink muted">M</span>
+                <span class="face face-green muted">You</span>
+              </div>
+              <p><strong id="answer-count">2 of 4</strong> answered</p>
+              <span class="streak">6 day group streak</span>
+            </div>
+
+            <form class="answer-form" id="answer-form">
+              <label for="answer">Your answer</label>
+              <textarea
+                id="answer"
+                name="answer"
+                rows="4"
+                maxlength="280"
+                placeholder="Say what you actually mean..."
+                required
+              ></textarea>
+              <div class="form-footer">
+                <span id="character-count">0 / 280</span>
+                <button class="primary-button" type="submit">
+                  Lock in answer <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </form>
+
+            <p class="privacy-note">
+              Everyone answers independently. Your group's responses unlock after you answer.
+            </p>
+          </div>
+
+          <aside class="reveal-panel" id="reveal-panel" aria-live="polite">
+            <div class="locked-state" id="locked-state">
+              <span class="lock-icon" aria-hidden="true">✦</span>
+              <p class="eyebrow">Friends' answers</p>
+              <h2>No peeking yet.</h2>
+              <p>Lock in your own answer to reveal what Jamie and Alex said.</p>
+              <div class="waiting-lines" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+
+            <div class="revealed-state" id="revealed-state" hidden>
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">The roommates</p>
+                  <h2>Answers are in.</h2>
+                </div>
+                <button class="icon-button" id="share-button" type="button" aria-label="Share results" title="Share results">↗</button>
+              </div>
+
+              <div class="answer-list">
+                <article class="friend-answer">
+                  <span class="face face-yellow">J</span>
+                  <div><strong>Jamie</strong><p>A dinner where nobody is rushing off somewhere after.</p></div>
+                </article>
+                <article class="friend-answer">
+                  <span class="face face-blue">A</span>
+                  <div><strong>Alex</strong><p>A weekend trip before it gets freezing.</p></div>
+                </article>
+                <article class="friend-answer yours">
+                  <span class="face face-green">You</span>
+                  <div><strong>You</strong><p id="your-answer"></p></div>
+                </article>
+              </div>
+
+              <div class="conversation-spark">
+                <span aria-hidden="true">↳</span>
+                <div>
+                  <p class="eyebrow">Take it to the chat</p>
+                  <p>What is one night this month everyone can protect?</p>
+                </div>
+              </div>
+
+              <button class="share-chat-button" id="share-chat-button" type="button">
+                Share conversation spark <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+          </aside>
+        </section>
+
+        <section class="how-it-works" aria-label="Daily rhythm">
+          <p class="eyebrow">One question. Your people.</p>
+          <div class="rhythm-steps">
+            <div><span>01</span><p>Answer without being influenced.</p></div>
+            <div><span>02</span><p>Reveal how your friends think.</p></div>
+            <div><span>03</span><p>Keep talking in your group chat.</p></div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="mobile-nav" aria-label="Primary navigation">
+        <a class="active" href="#"><span aria-hidden="true">●</span>Today</a>
+        <a href="#history"><span aria-hidden="true">◫</span>History</a>
+        <button type="button"><span aria-hidden="true">+</span>Invite</button>
+      </nav>
+
+      <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    </div>
+    <script src="./app.js"></script>
+  </body>
+</html>
