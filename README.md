@@ -9,6 +9,10 @@ Each daily answer defaults to friends-only. A person can instead make that
 day's answer public on the worldwide response wall or keep it entirely private.
 The visibility choice resets for every new question.
 
+Every day offers two paths: a playful worldwide question and a small reflective
+challenge. Completing either one keeps the same daily streak; people can choose
+based on their mood or complete both.
+
 ## Current Prototype
 
 Open `dist/index.html` or serve the `dist` directory locally. The prototype

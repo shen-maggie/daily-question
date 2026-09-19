@@ -126,6 +126,51 @@ button { color: inherit; }
   justify-content: center;
 }
 
+.daily-choice {
+  width: min(100%, 650px);
+  margin-bottom: 34px;
+  padding: 5px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.choice-button {
+  min-height: 66px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  text-align: left;
+  cursor: pointer;
+}
+.choice-button:hover { background: var(--soft); }
+.choice-button.active { background: var(--ink); color: white; }
+.choice-button:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.choice-icon {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--acid);
+  color: var(--ink);
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+.choice-button[data-mode="reflective"] .choice-icon { background: var(--blue); }
+.choice-button strong,
+.choice-button small { display: block; }
+.choice-button strong { font-size: 0.9rem; }
+.choice-button small { margin-top: 3px; color: #69716d; font-size: 0.75rem; }
+.choice-button.active small { color: #d8ddd9; }
+
 .question-meta,
 .status-row,
 .form-footer,
@@ -196,6 +241,7 @@ h1 {
   font-size: 0.78rem;
   font-weight: 750;
 }
+.streak.complete { background: var(--green); }
 
 .answer-form {
   max-width: 700px;
@@ -398,6 +444,9 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   .world-pulse { display: none; }
   .today-layout { display: block; min-height: auto; }
   .question-column { min-height: calc(100svh - 64px); border-right: 0; padding: 34px 20px 44px; justify-content: flex-start; }
+  .daily-choice { margin-bottom: 28px; }
+  .choice-button { min-height: 72px; padding: 9px; }
+  .choice-button small { display: none; }
   h1 { font-size: clamp(2.55rem, 12.5vw, 4.5rem); margin-top: 8px; }
   .question-meta { margin-bottom: 20px; }
   .status-row { margin: 28px 0; gap: 12px; }

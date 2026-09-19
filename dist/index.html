@@ -39,16 +39,27 @@
       <main>
         <section class="today-layout" aria-labelledby="question-heading">
           <div class="question-column">
+            <div class="daily-choice" aria-label="Choose today's path">
+              <button class="choice-button active" type="button" data-mode="fun" aria-pressed="true">
+                <span class="choice-icon" aria-hidden="true">☺</span>
+                <span><strong>Fun question</strong><small>Quick, playful, social</small></span>
+              </button>
+              <button class="choice-button" type="button" data-mode="reflective" aria-pressed="false">
+                <span class="choice-icon" aria-hidden="true">✦</span>
+                <span><strong>Reflective challenge</strong><small>A small moment for yourself</small></span>
+              </button>
+            </div>
+
             <div class="question-meta">
-              <span>Today's worldwide question</span>
+              <span id="daily-label">Today's worldwide fun question</span>
               <span>September 19</span>
             </div>
 
             <h1 id="question-heading">
-              What is something you want the group to make time for this fall?
+              If our friend group had a ridiculous mascot, what would it be?
             </h1>
 
-            <p class="world-note">People everywhere are answering this today. Only the audience you choose can see yours.</p>
+            <p class="world-note" id="world-note">People everywhere get the same question. Pick whatever makes you laugh first.</p>
 
             <div class="status-row" aria-label="Group participation">
               <div class="response-faces" aria-hidden="true">
@@ -58,17 +69,17 @@
                 <span class="face face-green muted">You</span>
               </div>
               <p><strong id="answer-count">2 of 4</strong> answered</p>
-              <span class="streak">6 day group streak</span>
+              <span class="streak" id="streak-status">6 day group streak</span>
             </div>
 
             <form class="answer-form" id="answer-form">
-              <label for="answer">Your answer</label>
+              <label for="answer" id="answer-label">Your answer</label>
               <textarea
                 id="answer"
                 name="answer"
                 rows="4"
                 maxlength="280"
-                placeholder="Say what you actually mean..."
+                placeholder="The more specific, the better..."
                 required
               ></textarea>
               <div class="form-footer">
@@ -123,11 +134,11 @@
               <div class="answer-list">
                 <article class="friend-answer">
                   <span class="face face-yellow">J</span>
-                  <div><strong>Jamie</strong><p>A dinner where nobody is rushing off somewhere after.</p></div>
+                  <div><strong>Jamie</strong><p id="jamie-answer">A tiny horse wearing our apartment keys like a necklace.</p></div>
                 </article>
                 <article class="friend-answer">
                   <span class="face face-blue">A</span>
-                  <div><strong>Alex</strong><p>A weekend trip before it gets freezing.</p></div>
+                  <div><strong>Alex</strong><p id="alex-answer">A very judgmental pigeon named Denise.</p></div>
                 </article>
                 <article class="friend-answer yours">
                   <span class="face face-green">You</span>
@@ -139,7 +150,7 @@
                 <span aria-hidden="true">↳</span>
                 <div>
                   <p class="eyebrow">Take it to the chat</p>
-                  <p>What is one night this month everyone can protect?</p>
+                  <p id="conversation-prompt">Okay, who is drawing the mascot?</p>
                 </div>
               </div>
 
@@ -153,13 +164,13 @@
         <section class="how-it-works" aria-label="Daily rhythm">
           <div class="section-intro">
             <p class="eyebrow">One shared moment</p>
-            <h2>The question is global. The closeness is local.</h2>
-            <p>Everyone gets the same starting point, but the good part happens with the people who know you.</p>
+            <h2>Pick what you need today. Either one keeps the ritual going.</h2>
+            <p>The world gets the same two choices each day. Your group can be silly together, slow down together, or split between both.</p>
           </div>
           <div class="rhythm-steps">
-            <div><span>01 · WORLD</span><p>One universal question gives everyone a reason to show up.</p></div>
-            <div><span>02 · CIRCLES</span><p>Friends reveal answers together, BeReal-style.</p></div>
-            <div><span>03 · CHAT</span><p>A thoughtful follow-up carries the conversation into your group chat.</p></div>
+            <div><span>01 · CHOOSE</span><p>Answer the fun question or try the reflective challenge.</p></div>
+            <div><span>02 · REVEAL</span><p>Either choice keeps your streak and unlocks friends on that path.</p></div>
+            <div><span>03 · TALK</span><p>A tailored follow-up carries the moment into your group chat.</p></div>
           </div>
         </section>
       </main>
