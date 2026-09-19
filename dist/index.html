@@ -29,9 +29,11 @@
         </div>
         <nav class="desktop-nav" aria-label="Primary navigation">
           <a class="active" href="#today">Today</a>
+          <a href="#circles">Circles</a>
           <a href="#history">History</a>
+          <a href="#friends">Friends</a>
         </nav>
-        <button class="group-switcher" type="button" aria-label="Switch group">
+        <button class="group-switcher" id="circle-shortcut" type="button" aria-label="Open The roommates circle">
           <span class="group-avatars" aria-hidden="true">
             <span>SG</span><span>JK</span><span>AM</span>
           </span>
@@ -60,7 +62,7 @@
             </div>
 
             <h1 id="question-heading">
-              If our friend group had a ridiculous mascot, what would it be?
+              If today had a movie title, what would it be?
             </h1>
 
             <p class="world-note" id="world-note">People everywhere get the same question. Pick whatever makes you laugh first.</p>
@@ -152,11 +154,11 @@
               <div class="answer-list">
                 <article class="friend-answer">
                   <span class="face face-yellow">J</span>
-                  <div><strong>Jamie</strong><p id="jamie-answer">A tiny horse wearing our apartment keys like a necklace.</p></div>
+                  <div><strong>Jamie</strong><p id="jamie-answer">Everything, Everywhere, Five Minutes Late.</p><button class="reaction-button" type="button" data-reaction="Jamie">♡ <span>2</span></button></div>
                 </article>
                 <article class="friend-answer">
                   <span class="face face-blue">A</span>
-                  <div><strong>Alex</strong><p id="alex-answer">A very judgmental pigeon named Denise.</p></div>
+                  <div><strong>Alex</strong><p id="alex-answer">The Last Clean Mug.</p><button class="reaction-button" type="button" data-reaction="Alex">♡ <span>1</span></button></div>
                 </article>
                 <article class="friend-answer yours">
                   <span class="face face-green">You</span>
@@ -175,6 +177,22 @@
               <button class="share-chat-button" id="share-chat-button" type="button">
                 Share conversation spark <span aria-hidden="true">↗</span>
               </button>
+
+              <section class="daily-room" aria-labelledby="today-room-heading">
+                <div class="room-heading">
+                  <div>
+                    <p class="eyebrow">Today's room</p>
+                    <h3 id="today-room-heading">Keep talking</h3>
+                  </div>
+                  <span class="room-members">4 here</span>
+                </div>
+                <div class="room-messages" data-room-messages="roommates"></div>
+                <form class="message-form" data-message-form="roommates">
+                  <label class="sr-only" for="today-message">Reply to your circle</label>
+                  <input id="today-message" name="message" maxlength="240" placeholder="Reply to the circle..." required />
+                  <button type="submit" aria-label="Send reply" title="Send reply">↑</button>
+                </form>
+              </section>
             </div>
           </aside>
         </section>
@@ -251,13 +269,111 @@
             </aside>
           </div>
         </section>
+
+        <section class="circles-view app-view" id="circles-view" hidden aria-labelledby="circles-heading">
+          <aside class="circle-sidebar">
+            <div class="view-title-row">
+              <div><p class="eyebrow">Your people</p><h1 id="circles-heading">Circles</h1></div>
+              <button class="add-icon-button" id="new-circle-button" type="button" aria-label="Create a circle" title="Create a circle">+</button>
+            </div>
+            <div class="circle-list" id="circle-list">
+              <button class="circle-list-item active" type="button" data-circle="roommates">
+                <span class="circle-avatar coral">TR</span>
+                <span><strong>The roommates</strong><small>3 new replies · 4 members</small></span>
+                <i aria-hidden="true">3</i>
+              </button>
+              <button class="circle-list-item" type="button" data-circle="studio">
+                <span class="circle-avatar blue">DS</span>
+                <span><strong>Design table</strong><small>Waiting for 2 answers · 5 members</small></span>
+              </button>
+              <button class="circle-list-item" type="button" data-circle="home">
+                <span class="circle-avatar green">HF</span>
+                <span><strong>Home friends</strong><small>Yesterday · 6 members</small></span>
+              </button>
+            </div>
+          </aside>
+
+          <div class="circle-room">
+            <header class="circle-room-header">
+              <div>
+                <p class="eyebrow">Today's daily room</p>
+                <h2 id="circle-room-name">The roommates</h2>
+              </div>
+              <div class="mini-faces" aria-label="Four circle members"><span>J</span><span>A</span><span>M</span><span>You</span></div>
+            </header>
+
+            <div class="room-question-strip">
+              <span class="history-badge fun">Fun question</span>
+              <p id="circle-room-question">If today had a movie title, what would it be?</p>
+              <a href="#today">View answers</a>
+            </div>
+
+            <div class="room-messages circle-page-messages" data-room-messages="active"></div>
+
+            <div class="suggested-followup">
+              <span aria-hidden="true">✦</span>
+              <p><strong>Keep it going</strong><br /><span id="circle-followup">Which title deserves an actual poster?</span></p>
+            </div>
+
+            <form class="message-form circle-message-form" data-message-form="active">
+              <label class="sr-only" for="circle-message">Message this circle</label>
+              <input id="circle-message" name="message" maxlength="240" placeholder="Message The roommates..." required />
+              <button type="submit" aria-label="Send message" title="Send message">↑</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="friends-view app-view" id="friends-view" hidden aria-labelledby="friends-heading">
+          <header class="friends-header">
+            <div><p class="eyebrow">Your people</p><h1 id="friends-heading">Friends</h1><p>Friends can be added to one or more circles.</p></div>
+            <button class="primary-button" id="add-friend-button" type="button">Add friend</button>
+          </header>
+
+          <form class="friend-search" id="friend-search-form" hidden>
+            <label for="friend-username">Sidequest username</label>
+            <div><input id="friend-username" name="username" placeholder="@username" required /><button type="submit">Send request</button></div>
+          </form>
+
+          <div class="friends-grid" id="friends-grid">
+            <article class="friend-row" data-friend="Jamie">
+              <span class="face face-yellow">J</span><div><strong>Jamie Kim</strong><small>@jamiek · 2 circles</small></div><span class="friend-status answered">Answered today</span><button class="more-button" type="button" aria-label="More options for Jamie">•••</button>
+            </article>
+            <article class="friend-row" data-friend="Alex">
+              <span class="face face-blue">A</span><div><strong>Alex Morgan</strong><small>@alexm · 1 circle</small></div><span class="friend-status answered">Answered today</span><button class="more-button" type="button" aria-label="More options for Alex">•••</button>
+            </article>
+            <article class="friend-row" data-friend="Maya">
+              <span class="face face-pink">M</span><div><strong>Maya Patel</strong><small>@mayap · 2 circles</small></div><span class="friend-status">Not yet</span><button class="more-button" type="button" aria-label="More options for Maya">•••</button>
+            </article>
+            <article class="friend-row" data-friend="Noah">
+              <span class="face face-green">N</span><div><strong>Noah Chen</strong><small>@noahc · 1 circle</small></div><span class="friend-status">Not yet</span><button class="more-button" type="button" aria-label="More options for Noah">•••</button>
+            </article>
+          </div>
+        </section>
       </main>
 
       <nav class="mobile-nav" aria-label="Primary navigation">
         <a class="active" href="#today"><span aria-hidden="true">●</span>Today</a>
+        <a href="#circles"><span aria-hidden="true">◉</span>Circles</a>
         <a href="#history"><span aria-hidden="true">◫</span>History</a>
-        <button type="button"><span aria-hidden="true">+</span>Invite</button>
+        <a href="#friends"><span aria-hidden="true">+</span>Friends</a>
       </nav>
+
+      <dialog class="circle-dialog" id="circle-dialog">
+        <form method="dialog" id="create-circle-form">
+          <div class="dialog-heading"><div><p class="eyebrow">New circle</p><h2>Bring people together</h2></div><button class="icon-button dark" id="close-circle-dialog" type="button" aria-label="Close dialog">×</button></div>
+          <label class="circle-name-label" for="circle-name">Circle name</label>
+          <input id="circle-name" name="circleName" placeholder="Sunday dinner, college friends..." maxlength="40" required />
+          <fieldset class="friend-picker">
+            <legend>Choose friends</legend>
+            <label><input type="checkbox" name="members" value="Jamie" /><span class="face face-yellow">J</span><span><strong>Jamie Kim</strong><small>@jamiek</small></span></label>
+            <label><input type="checkbox" name="members" value="Alex" /><span class="face face-blue">A</span><span><strong>Alex Morgan</strong><small>@alexm</small></span></label>
+            <label><input type="checkbox" name="members" value="Maya" /><span class="face face-pink">M</span><span><strong>Maya Patel</strong><small>@mayap</small></span></label>
+            <label><input type="checkbox" name="members" value="Noah" /><span class="face face-green">N</span><span><strong>Noah Chen</strong><small>@noahc</small></span></label>
+          </fieldset>
+          <p class="form-error" id="circle-form-error" hidden>Choose at least one friend.</p>
+          <button class="primary-button dialog-submit" value="default" type="submit">Create circle</button>
+        </form>
+      </dialog>
 
       <div class="toast" id="toast" role="status" aria-live="polite"></div>
     </div>

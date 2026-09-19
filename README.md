@@ -15,8 +15,13 @@ based on their mood or answer both. History records the selected path, answer,
 and audience by calendar date.
 
 Sidequest does not replace a group chat. Circles handle mutual answer reveals;
-the native share action sends the daily prompt or conversation spark into an
-existing Messages or Discord chat.
+each daily reveal opens a focused conversation room with reactions and replies.
+The native share action can still send the prompt or conversation spark into an
+existing Messages or Discord chat as a reminder.
+
+The current prototype includes working Today, Circles, History, and Friends
+views. Local demo state supports creating circles, choosing members, adding
+friends, posting circle messages, reacting, and revisiting past responses.
 
 ## Current Prototype
 

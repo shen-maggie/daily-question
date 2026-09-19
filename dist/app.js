@@ -24,6 +24,16 @@ const historyView = document.querySelector("#history-view");
 const historyDetail = document.querySelector("#history-detail");
 const calendarDays = document.querySelectorAll(".calendar-day[data-date]");
 const routeLinks = document.querySelectorAll('.desktop-nav a, .mobile-nav a[href^="#"]');
+const circlesView = document.querySelector("#circles-view");
+const friendsView = document.querySelector("#friends-view");
+const circleDialog = document.querySelector("#circle-dialog");
+const createCircleForm = document.querySelector("#create-circle-form");
+const circleList = document.querySelector("#circle-list");
+const roomName = document.querySelector("#circle-room-name");
+const roomQuestion = document.querySelector("#circle-room-question");
+const circleFollowup = document.querySelector("#circle-followup");
+const friendSearchForm = document.querySelector("#friend-search-form");
+const friendsGrid = document.querySelector("#friends-grid");
 
 const privacyLabels = {
   friends: "My circle",
@@ -41,13 +51,13 @@ const dailyModes = {
   fun: {
     shortLabel: "Fun question",
     label: "Today's worldwide fun question",
-    question: "If our friend group had a ridiculous mascot, what would it be?",
+    question: "If today had a movie title, what would it be?",
     note: "People everywhere get the same question. Pick whatever makes you laugh first.",
     answerLabel: "Your answer",
     placeholder: "The more specific, the better...",
-    jamie: "A tiny horse wearing our apartment keys like a necklace.",
-    alex: "A very judgmental pigeon named Denise.",
-    followUp: "Okay, who is drawing the mascot?",
+    jamie: "Everything, Everywhere, Five Minutes Late.",
+    alex: "The Last Clean Mug.",
+    followUp: "Which title deserves an actual poster?",
   },
   reflective: {
     shortLabel: "Reflective question",
@@ -102,6 +112,29 @@ const historyRecords = {
     { mode: "fun", privacy: "friends", question: "What would your warning label say?", answer: "Will reorganize your bookshelf without permission.", shared: "Shared with The roommates · 4 replies" },
   ],
 };
+
+const seededMessages = [
+  { author: "Jamie", initial: "J", color: "face-yellow", text: "Alex, yours sounds like a horror movie set in our kitchen." },
+  { author: "Alex", initial: "A", color: "face-blue", text: "It was. Someone used the last mug and left it in their room." },
+  { author: "Maya", initial: "M", color: "face-pink", text: "My title is Four People, One Functioning Charger." },
+];
+
+let circleMessages;
+try {
+  const savedCircleMessages = JSON.parse(localStorage.getItem("sidequest-circle-messages") || "null");
+  const legacyMessages = JSON.parse(localStorage.getItem("sidequest-roommates-messages") || "null");
+  circleMessages = savedCircleMessages || { roommates: legacyMessages || seededMessages, studio: [], home: [] };
+} catch {
+  circleMessages = { roommates: seededMessages, studio: [], home: [] };
+}
+let activeCircleId = "roommates";
+
+let customCircles;
+try {
+  customCircles = JSON.parse(localStorage.getItem("sidequest-custom-circles") || "[]");
+} catch {
+  customCircles = [];
+}
 
 const savedMode = localStorage.getItem("sidequest-active-mode-001");
 let activeMode = dailyModes[savedMode] ? savedMode : "fun";
@@ -196,6 +229,8 @@ function renderMode(mode) {
   jamieAnswer.textContent = content.jamie;
   alexAnswer.textContent = content.alex;
   conversationPrompt.textContent = content.followUp;
+  roomQuestion.textContent = content.question;
+  circleFollowup.textContent = content.followUp;
 
   streakStatus.textContent = hasCompletedToday() ? "Today's streak kept" : "6 day group streak";
   streakStatus.classList.toggle("complete", hasCompletedToday());
@@ -229,6 +264,90 @@ async function shareToChat(includeFollowUp = true) {
   } catch (error) {
     if (error.name !== "AbortError") showToast("Couldn't share this time");
   }
+}
+
+function makeMessage(message) {
+  const item = document.createElement("article");
+  item.className = `room-message${message.author === "You" ? " mine" : ""}`;
+  const avatar = document.createElement("span");
+  avatar.className = `face ${message.color}`;
+  avatar.textContent = message.initial;
+  const bubble = document.createElement("div");
+  bubble.className = "message-bubble";
+  const author = document.createElement("strong");
+  author.textContent = message.author;
+  const text = document.createElement("p");
+  text.textContent = message.text;
+  bubble.append(author, text);
+  item.append(avatar, bubble);
+  return item;
+}
+
+function renderMessages() {
+  document.querySelectorAll("[data-room-messages]").forEach((container) => {
+    const circleId = container.dataset.roomMessages === "active" ? activeCircleId : container.dataset.roomMessages;
+    const messages = circleMessages[circleId] || [];
+    if (!messages.length) {
+      const empty = document.createElement("p");
+      empty.className = "empty-room";
+      empty.textContent = "No replies yet. Answer today's question to start this room.";
+      container.replaceChildren(empty);
+    } else {
+      container.replaceChildren(...messages.map(makeMessage));
+    }
+  });
+}
+
+function postMessage(text, circleId) {
+  if (!circleMessages[circleId]) circleMessages[circleId] = [];
+  circleMessages[circleId].push({ author: "You", initial: "You", color: "face-green", text });
+  localStorage.setItem("sidequest-circle-messages", JSON.stringify(circleMessages));
+  renderMessages();
+  showToast(`Message sent to ${circleId === "roommates" ? "The roommates" : roomName.textContent}`);
+}
+
+function makeCircleListItem(circle) {
+  const button = document.createElement("button");
+  button.className = "circle-list-item";
+  button.type = "button";
+  button.dataset.circle = circle.id;
+  button.dataset.name = circle.name;
+  const avatar = document.createElement("span");
+  avatar.className = "circle-avatar coral";
+  avatar.textContent = circle.name.split(/\s+/).map((word) => word[0]).join("").slice(0, 2).toUpperCase();
+  const copy = document.createElement("span");
+  const name = document.createElement("strong");
+  name.textContent = circle.name;
+  const status = document.createElement("small");
+  status.textContent = `New circle · ${circle.members.length + 1} members`;
+  copy.append(name, status);
+  button.append(avatar, copy);
+  return button;
+}
+
+function addFriendRow(username) {
+  const cleanName = username.replace(/^@/, "");
+  const row = document.createElement("article");
+  row.className = "friend-row";
+  const avatar = document.createElement("span");
+  avatar.className = "face face-green";
+  avatar.textContent = cleanName.charAt(0).toUpperCase();
+  const copy = document.createElement("div");
+  const name = document.createElement("strong");
+  name.textContent = cleanName;
+  const handle = document.createElement("small");
+  handle.textContent = `@${cleanName} · Request sent`;
+  copy.append(name, handle);
+  const status = document.createElement("span");
+  status.className = "friend-status";
+  status.textContent = "Pending";
+  const more = document.createElement("button");
+  more.className = "more-button";
+  more.type = "button";
+  more.setAttribute("aria-label", `More options for ${cleanName}`);
+  more.textContent = "•••";
+  row.append(avatar, copy, status, more);
+  friendsGrid.prepend(row);
 }
 
 function badge(text, className) {
@@ -292,14 +411,17 @@ function updateTodayCalendar() {
 }
 
 function renderRoute() {
-  const historyActive = window.location.hash === "#history";
-  todaySections.forEach((section) => { section.hidden = historyActive; });
-  historyView.hidden = !historyActive;
+  const route = ["#history", "#circles", "#friends"].includes(window.location.hash)
+    ? window.location.hash
+    : "#today";
+  todaySections.forEach((section) => { section.hidden = route !== "#today"; });
+  historyView.hidden = route !== "#history";
+  circlesView.hidden = route !== "#circles";
+  friendsView.hidden = route !== "#friends";
   routeLinks.forEach((link) => {
-    const active = historyActive ? link.getAttribute("href") === "#history" : link.getAttribute("href") === "#today";
-    link.classList.toggle("active", active);
+    link.classList.toggle("active", link.getAttribute("href") === route);
   });
-  if (historyActive) {
+  if (route === "#history") {
     updateTodayCalendar();
     renderHistory(document.querySelector(".calendar-day.selected")?.dataset.date || "2026-09-18");
   }
@@ -312,6 +434,85 @@ modeButtons.forEach((button) => {
 
 calendarDays.forEach((day) => {
   day.addEventListener("click", () => renderHistory(day.dataset.date));
+});
+
+document.querySelectorAll("[data-message-form]").forEach((messageForm) => {
+  messageForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const input = messageForm.elements.message;
+    const text = input.value.trim();
+    if (!text) return;
+    const circleId = messageForm.dataset.messageForm === "active" ? activeCircleId : messageForm.dataset.messageForm;
+    postMessage(text, circleId);
+    input.value = "";
+  });
+});
+
+document.querySelectorAll(".reaction-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const count = button.querySelector("span");
+    const active = button.classList.toggle("active");
+    button.firstChild.textContent = active ? "♥ " : "♡ ";
+    count.textContent = String(Number(count.textContent) + (active ? 1 : -1));
+  });
+});
+
+circleList.addEventListener("click", (event) => {
+  const item = event.target.closest(".circle-list-item");
+  if (!item) return;
+  activeCircleId = item.dataset.circle;
+  circleList.querySelectorAll(".circle-list-item").forEach((button) => button.classList.toggle("active", button === item));
+  roomName.textContent = item.dataset.name || item.querySelector("strong").textContent;
+  document.querySelector("#circle-message").placeholder = `Message ${roomName.textContent}...`;
+  renderMessages();
+});
+
+document.querySelector("#circle-shortcut").addEventListener("click", () => {
+  window.location.hash = "#circles";
+});
+
+document.querySelector("#new-circle-button").addEventListener("click", () => {
+  document.querySelector("#circle-form-error").hidden = true;
+  circleDialog.showModal();
+});
+
+document.querySelector("#close-circle-dialog").addEventListener("click", () => circleDialog.close());
+
+createCircleForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const name = createCircleForm.elements.circleName.value.trim();
+  const members = [...createCircleForm.querySelectorAll('input[name="members"]:checked')].map((input) => input.value);
+  if (!name || !members.length) {
+    document.querySelector("#circle-form-error").hidden = false;
+    return;
+  }
+  const circle = { id: `circle-${Date.now()}`, name, members };
+  circleMessages[circle.id] = [];
+  localStorage.setItem("sidequest-circle-messages", JSON.stringify(circleMessages));
+  customCircles.push(circle);
+  localStorage.setItem("sidequest-custom-circles", JSON.stringify(customCircles));
+  const item = makeCircleListItem(circle);
+  circleList.append(item);
+  createCircleForm.reset();
+  circleDialog.close();
+  item.click();
+  showToast(`${name} created`);
+});
+
+document.querySelector("#add-friend-button").addEventListener("click", () => {
+  friendSearchForm.hidden = !friendSearchForm.hidden;
+  if (!friendSearchForm.hidden) document.querySelector("#friend-username").focus();
+});
+
+friendSearchForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const input = friendSearchForm.elements.username;
+  const username = input.value.trim();
+  if (!username) return;
+  addFriendRow(username);
+  input.value = "";
+  friendSearchForm.hidden = true;
+  showToast(`Friend request sent to ${username}`);
 });
 
 answerInput.addEventListener("input", () => {
@@ -340,4 +541,6 @@ window.addEventListener("hashchange", renderRoute);
 
 renderMode(activeMode);
 updateTodayCalendar();
+customCircles.forEach((circle) => circleList.append(makeCircleListItem(circle)));
+renderMessages();
 renderRoute();
