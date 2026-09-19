@@ -13,7 +13,13 @@ const privacyResult = document.querySelector("#privacy-result");
 const questionHeading = document.querySelector("#question-heading");
 const dailyLabel = document.querySelector("#daily-label");
 const worldNote = document.querySelector("#world-note");
-const streakStatus = document.querySelector("#streak-status");
+const personalStreakStatus = document.querySelector("#personal-streak-status");
+const personalStreakMeter = document.querySelector("#personal-streak-meter");
+const groupStreakStatus = document.querySelector("#group-streak-status");
+const groupStreakMeter = document.querySelector("#group-streak-meter");
+const circleStreakCopy = document.querySelector("#circle-streak-copy");
+const circleStreakCount = document.querySelector("#circle-streak-count");
+const circleStreakMeter = document.querySelector("#circle-streak-meter");
 const jamieAnswer = document.querySelector("#jamie-answer");
 const alexAnswer = document.querySelector("#alex-answer");
 const conversationPrompt = document.querySelector("#conversation-prompt");
@@ -168,6 +174,26 @@ function hasCompletedToday() {
   return getTodayRecords().length > 0;
 }
 
+function renderStreaks() {
+  const completed = hasCompletedToday();
+  const groupAnswers = completed ? 3 : 2;
+
+  personalStreakStatus.textContent = completed
+    ? "Kept for today. One answer was enough."
+    : "Answer either question to keep it going.";
+  personalStreakMeter.style.width = completed ? "100%" : "72%";
+
+  groupStreakStatus.textContent = completed
+    ? "3 of 4 answered either question today."
+    : "2 of 4 answered either question today.";
+  groupStreakMeter.style.width = `${groupAnswers * 25}%`;
+  circleStreakCopy.textContent = completed
+    ? "3 of 4 people have answered today. Waiting on Maya."
+    : "2 of 4 people have answered today. Either daily question counts.";
+  circleStreakCount.textContent = `${groupAnswers} / 4`;
+  circleStreakMeter.style.width = `${groupAnswers * 25}%`;
+}
+
 function setFormLocked(locked) {
   answerInput.disabled = locked;
   form.querySelector('button[type="submit"]').disabled = locked;
@@ -232,8 +258,7 @@ function renderMode(mode) {
   roomQuestion.textContent = content.question;
   circleFollowup.textContent = content.followUp;
 
-  streakStatus.textContent = hasCompletedToday() ? "Today's streak kept" : "6 day group streak";
-  streakStatus.classList.toggle("complete", hasCompletedToday());
+  renderStreaks();
 
   if (saved.answer) showCompleted(saved.answer, saved.privacy);
   else showLockedState();
@@ -527,8 +552,7 @@ form.addEventListener("submit", (event) => {
   localStorage.setItem(storageKey("answer"), answer);
   localStorage.setItem(storageKey("privacy"), privacy);
   showCompleted(answer, privacy);
-  streakStatus.textContent = "Today's streak kept";
-  streakStatus.classList.add("complete");
+  renderStreaks();
   updateTodayCalendar();
   document.querySelector("#reveal-panel").scrollIntoView({ behavior: "smooth" });
   showToast(privacy === "private" ? "Saved just for you. Your streak is safe." : "Shared. Your streak is safe.");

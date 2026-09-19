@@ -249,15 +249,26 @@ h1 {
 .face-pink { background: var(--pink); }
 .face-green { background: var(--green); }
 .face.muted { filter: grayscale(1); opacity: 0.35; }
-.streak {
-  background: var(--blue-soft);
-  color: var(--ink);
-  padding: 6px 10px;
-  border-radius: 3px;
-  font-size: 0.78rem;
-  font-weight: 750;
+.streak-board {
+  width: min(100%, 700px);
+  margin: -14px 0 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--ink);
+  border-radius: 7px;
+  overflow: hidden;
 }
-.streak.complete { background: var(--green); }
+.streak-card { min-width: 0; padding: 15px 16px 14px; background: rgba(255, 255, 255, 0.45); }
+.streak-card + .streak-card { border-left: 1px solid var(--ink); }
+.personal-streak { background: #fff3d7; }
+.circle-streak { background: var(--blue-soft); }
+.streak-card-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.streak-card-heading strong { font-family: Georgia, "Times New Roman", serif; font-size: 1.3rem; font-weight: 600; white-space: nowrap; }
+.streak-kicker { font-size: 0.72rem; font-weight: 900; text-transform: uppercase; }
+.streak-card p { min-height: 34px; margin: 8px 0 12px; color: #5f6863; font-size: 0.78rem; line-height: 1.35; }
+.streak-meter { height: 7px; overflow: hidden; border: 1px solid var(--ink); border-radius: 2px; background: rgba(255, 255, 255, 0.65); }
+.streak-meter span { display: block; width: 50%; height: 100%; background: var(--berry); transition: width 220ms ease; }
+.personal-streak .streak-meter span { background: var(--green); }
 
 .answer-form {
   max-width: 700px;
@@ -614,6 +625,23 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
 .circle-room-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; border-bottom: 1px solid #aebfca; padding-bottom: 24px; }
 .circle-room-header .eyebrow { margin-top: 0; color: var(--berry); }
 .circle-room-header h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.6rem, 5vw, 5rem); font-weight: 600; line-height: 1; }
+.circle-streak-panel {
+  margin: 24px 0 0;
+  padding: 17px 18px;
+  border: 1px solid var(--ink);
+  border-radius: 7px;
+  display: grid;
+  grid-template-columns: 1fr minmax(150px, 220px);
+  gap: 24px;
+  align-items: center;
+  background: #fff3d7;
+}
+.circle-streak-panel .eyebrow { margin: 0 0 4px; color: var(--berry); }
+.circle-streak-panel h3 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; font-weight: 600; }
+.circle-streak-panel p:last-child { margin: 5px 0 0; color: #5f6863; font-size: 0.82rem; line-height: 1.4; }
+.circle-streak-progress { display: grid; gap: 8px; }
+.circle-streak-progress > span { justify-self: end; font-size: 0.76rem; font-weight: 900; }
+.circle-streak-progress .streak-meter span { background: var(--berry); }
 .mini-faces { display: flex; }
 .mini-faces span { width: 34px; height: 34px; margin-left: -7px; border: 1px solid var(--ink); border-radius: 50%; display: grid; place-items: center; background: var(--paper); font-size: 0.62rem; font-weight: 850; }
 .room-question-strip { margin: 26px 0; padding: 18px 0; border-bottom: 1px solid #aebfca; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
@@ -698,7 +726,8 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   h1 { font-size: clamp(2.55rem, 12.5vw, 4.5rem); margin-top: 8px; }
   .question-meta { margin-bottom: 20px; }
   .status-row { margin: 28px 0; gap: 12px; }
-  .streak { width: fit-content; }
+  .streak-board { grid-template-columns: 1fr; margin-top: -10px; }
+  .streak-card + .streak-card { border-left: 0; border-top: 1px solid var(--ink); }
   textarea { min-height: 108px; }
   .form-footer { align-items: flex-end; }
   .primary-button { max-width: 190px; }
@@ -756,6 +785,7 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   .circle-list-item { min-width: 245px; }
   .circle-room { padding: 34px 18px 100px; }
   .circle-room-header { display: block; }
+  .circle-streak-panel { grid-template-columns: 1fr; gap: 16px; }
   .mini-faces { margin-top: 20px; padding-left: 7px; }
   .room-question-strip { grid-template-columns: 1fr auto; }
   .room-question-strip .history-badge { grid-column: 1 / -1; width: fit-content; }

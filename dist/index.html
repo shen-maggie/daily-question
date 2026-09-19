@@ -75,7 +75,25 @@
                 <span class="face face-green muted">You</span>
               </div>
               <p><strong id="answer-count">2 of 4</strong> answered</p>
-              <span class="streak" id="streak-status">6 day group streak</span>
+            </div>
+
+            <div class="streak-board" aria-label="Today's streaks">
+              <article class="streak-card personal-streak">
+                <div class="streak-card-heading">
+                  <span class="streak-kicker">Personal streak</span>
+                  <strong>12 days</strong>
+                </div>
+                <p id="personal-streak-status">Answer either question to keep it going.</p>
+                <div class="streak-meter" aria-hidden="true"><span id="personal-streak-meter"></span></div>
+              </article>
+              <article class="streak-card circle-streak">
+                <div class="streak-card-heading">
+                  <span class="streak-kicker">The roommates</span>
+                  <strong>6 days</strong>
+                </div>
+                <p id="group-streak-status">2 of 4 answered either question today.</p>
+                <div class="streak-meter" aria-hidden="true"><span id="group-streak-meter"></span></div>
+              </article>
             </div>
 
             <form class="answer-form" id="answer-form">
@@ -301,6 +319,18 @@
               </div>
               <div class="mini-faces" aria-label="Four circle members"><span>J</span><span>A</span><span>M</span><span>You</span></div>
             </header>
+
+            <section class="circle-streak-panel" aria-labelledby="circle-streak-heading">
+              <div>
+                <p class="eyebrow">Circle streak</p>
+                <h3 id="circle-streak-heading"><span id="circle-streak-days">6</span> days together</h3>
+                <p id="circle-streak-copy">2 of 4 people have answered today. Either daily question counts.</p>
+              </div>
+              <div class="circle-streak-progress">
+                <span id="circle-streak-count">2 / 4</span>
+                <div class="streak-meter" aria-hidden="true"><span id="circle-streak-meter"></span></div>
+              </div>
+            </section>
 
             <div class="room-question-strip">
               <span class="history-badge fun">Fun question</span>

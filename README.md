@@ -14,6 +14,11 @@ question. Completing either one keeps the same daily streak; people can choose
 based on their mood or answer both. History records the selected path, answer,
 and audience by calendar date.
 
+Streaks work at two levels. A personal streak continues after answering either
+daily question. A circle streak continues when every member has answered at
+least one of the two questions that day, even when the group splits between the
+fun and reflective prompts.
+
 Sidequest does not replace a group chat. Circles handle mutual answer reveals;
 each daily reveal opens a focused conversation room with reactions and replies.
 The native share action can still send the prompt or conversation spark into an
