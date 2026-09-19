@@ -625,6 +625,9 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
 .circle-room-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; border-bottom: 1px solid #aebfca; padding-bottom: 24px; }
 .circle-room-header .eyebrow { margin-top: 0; color: var(--berry); }
 .circle-room-header h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2.6rem, 5vw, 5rem); font-weight: 600; line-height: 1; }
+.circle-header-actions { display: flex; align-items: center; gap: 18px; }
+.ritual-settings-button,
+.text-button { border: 0; background: transparent; color: var(--berry); font-size: 0.8rem; font-weight: 900; text-decoration: underline; cursor: pointer; }
 .circle-streak-panel {
   margin: 24px 0 0;
   padding: 17px 18px;
@@ -647,6 +650,24 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
 .room-question-strip { margin: 26px 0; padding: 18px 0; border-bottom: 1px solid #aebfca; display: grid; grid-template-columns: auto 1fr auto; gap: 16px; align-items: center; }
 .room-question-strip p { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.25rem; }
 .room-question-strip a { color: var(--berry); font-size: 0.82rem; font-weight: 850; }
+.next-ritual {
+  max-width: 760px;
+  margin: 0 0 26px;
+  padding: 16px;
+  border: 1px solid var(--ink);
+  border-radius: 7px;
+  display: grid;
+  grid-template-columns: 54px 1fr auto;
+  gap: 16px;
+  align-items: center;
+  background: rgba(255, 250, 242, 0.72);
+}
+.ritual-date { width: 54px; min-height: 58px; border: 1px solid var(--ink); border-radius: 5px; display: grid; place-content: center; text-align: center; background: var(--pink); }
+.ritual-date span { font-size: 0.62rem; font-weight: 900; }
+.ritual-date strong { font-family: Georgia, "Times New Roman", serif; font-size: 1.45rem; line-height: 1; }
+.next-ritual .eyebrow { margin: 0 0 3px; color: var(--berry); }
+.next-ritual h3 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.45rem; font-weight: 600; }
+.next-ritual p:last-child { margin: 4px 0 0; color: #5f6863; font-size: 0.83rem; line-height: 1.35; }
 .circle-page-messages { min-height: 240px; max-width: 760px; }
 .suggested-followup { max-width: 760px; margin: 24px 0; padding: 15px 17px; border: 1px solid var(--berry); border-radius: 6px; display: flex; gap: 12px; background: rgba(255, 250, 242, 0.5); }
 .suggested-followup > span { color: var(--berry); }
@@ -691,6 +712,15 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
 .friend-picker small { margin-top: 2px; color: #6d746f; }
 .form-error { color: #8d3037; font-weight: 800; }
 .dialog-submit { width: 100%; }
+.ritual-dialog { width: min(670px, calc(100% - 28px)); }
+.dialog-heading > div > p:last-child { max-width: 470px; margin: -14px 0 24px; color: #5f6863; line-height: 1.45; }
+.ritual-options { display: grid; border-top: 1px solid var(--ink); }
+.ritual-option { min-height: 84px; padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: auto 1fr 130px; gap: 12px; align-items: center; cursor: pointer; }
+.ritual-option > input { width: 18px; height: 18px; accent-color: var(--berry); }
+.ritual-copy strong,
+.ritual-copy small { display: block; }
+.ritual-copy small { margin-top: 4px; color: #69716d; line-height: 1.35; }
+.ritual-option select { min-height: 38px; padding: 0 8px; border: 1px solid var(--ink); border-radius: 5px; background: white; }
 
 .toast {
   position: fixed;
@@ -785,16 +815,21 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   .circle-list-item { min-width: 245px; }
   .circle-room { padding: 34px 18px 100px; }
   .circle-room-header { display: block; }
+  .circle-header-actions { margin-top: 20px; justify-content: space-between; }
   .circle-streak-panel { grid-template-columns: 1fr; gap: 16px; }
   .mini-faces { margin-top: 20px; padding-left: 7px; }
   .room-question-strip { grid-template-columns: 1fr auto; }
   .room-question-strip .history-badge { grid-column: 1 / -1; width: fit-content; }
+  .next-ritual { grid-template-columns: 54px 1fr; }
+  .next-ritual .text-button { grid-column: 2; justify-self: start; padding: 0; }
   .friends-view { padding: 34px 18px 100px; }
   .friends-header { align-items: center; }
   .friends-header h1 { font-size: 3rem; }
   .friend-row { grid-template-columns: 44px 1fr auto; }
   .friend-status { display: none; }
   .friend-picker { grid-template-columns: 1fr; }
+  .ritual-option { grid-template-columns: auto 1fr; }
+  .ritual-option select { grid-column: 2; width: 100%; }
   .circle-dialog form { padding: 20px; }
 }
 

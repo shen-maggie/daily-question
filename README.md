@@ -19,6 +19,11 @@ daily question. A circle streak continues when every member has answered at
 least one of the two questions that day, even when the group splits between the
 fun and reflective prompts.
 
+Circles can also subscribe to up to two optional weekly rituals: Most Likely
+To, Would You Rather, or Sunday Reflection. Each ritual can be assigned to a
+weekday and appears as the circle's next scheduled conversation prompt. Rituals
+are separate from the worldwide questions and do not affect personal streaks.
+
 Sidequest does not replace a group chat. Circles handle mutual answer reveals;
 each daily reveal opens a focused conversation room with reactions and replies.
 The native share action can still send the prompt or conversation spark into an

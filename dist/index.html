@@ -317,7 +317,10 @@
                 <p class="eyebrow">Today's daily room</p>
                 <h2 id="circle-room-name">The roommates</h2>
               </div>
-              <div class="mini-faces" aria-label="Four circle members"><span>J</span><span>A</span><span>M</span><span>You</span></div>
+              <div class="circle-header-actions">
+                <div class="mini-faces" aria-label="Four circle members"><span>J</span><span>A</span><span>M</span><span>You</span></div>
+                <button class="ritual-settings-button" id="ritual-settings-button" type="button">Rituals</button>
+              </div>
             </header>
 
             <section class="circle-streak-panel" aria-labelledby="circle-streak-heading">
@@ -337,6 +340,19 @@
               <p id="circle-room-question">If today had a movie title, what would it be?</p>
               <a href="#today">View answers</a>
             </div>
+
+            <section class="next-ritual" id="next-ritual" aria-labelledby="next-ritual-heading">
+              <div class="ritual-date">
+                <span id="next-ritual-day">WED</span>
+                <strong id="next-ritual-date">23</strong>
+              </div>
+              <div>
+                <p class="eyebrow">Next circle ritual</p>
+                <h3 id="next-ritual-heading">Most Likely To</h3>
+                <p id="next-ritual-preview">Who is most likely to accidentally become internet famous?</p>
+              </div>
+              <button class="text-button" id="edit-rituals-button" type="button">Edit schedule</button>
+            </section>
 
             <div class="room-messages circle-page-messages" data-room-messages="active"></div>
 
@@ -402,6 +418,40 @@
           </fieldset>
           <p class="form-error" id="circle-form-error" hidden>Choose at least one friend.</p>
           <button class="primary-button dialog-submit" value="default" type="submit">Create circle</button>
+        </form>
+      </dialog>
+
+      <dialog class="circle-dialog ritual-dialog" id="ritual-dialog">
+        <form method="dialog" id="ritual-form">
+          <div class="dialog-heading">
+            <div><p class="eyebrow">Circle settings</p><h2>Weekly rituals</h2><p>Choose up to two. These are optional and do not affect personal streaks.</p></div>
+            <button class="icon-button dark" id="close-ritual-dialog" type="button" aria-label="Close ritual settings">×</button>
+          </div>
+          <div class="ritual-options">
+            <label class="ritual-option">
+              <input type="checkbox" name="ritual" value="likely" checked />
+              <span class="ritual-copy"><strong>Most Likely To</strong><small>Vote for someone, then reveal together.</small></span>
+              <select name="likelyDay" aria-label="Most Likely To day">
+                <option value="3" selected>Wednesday</option><option value="5">Friday</option><option value="0">Sunday</option>
+              </select>
+            </label>
+            <label class="ritual-option">
+              <input type="checkbox" name="ritual" value="rather" />
+              <span class="ritual-copy"><strong>Would You Rather</strong><small>Pick a side and defend it in the room.</small></span>
+              <select name="ratherDay" aria-label="Would You Rather day">
+                <option value="3">Wednesday</option><option value="5" selected>Friday</option><option value="0">Sunday</option>
+              </select>
+            </label>
+            <label class="ritual-option">
+              <input type="checkbox" name="ritual" value="reflection" checked />
+              <span class="ritual-copy"><strong>Sunday Reflection</strong><small>A slower prompt for ending the week together.</small></span>
+              <select name="reflectionDay" aria-label="Sunday Reflection day">
+                <option value="3">Wednesday</option><option value="5">Friday</option><option value="0" selected>Sunday</option>
+              </select>
+            </label>
+          </div>
+          <p class="form-error" id="ritual-form-error" hidden>Choose no more than two rituals.</p>
+          <button class="primary-button dialog-submit" value="default" type="submit">Save circle rituals</button>
         </form>
       </dialog>
 

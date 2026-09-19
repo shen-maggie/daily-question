@@ -40,6 +40,13 @@ const roomQuestion = document.querySelector("#circle-room-question");
 const circleFollowup = document.querySelector("#circle-followup");
 const friendSearchForm = document.querySelector("#friend-search-form");
 const friendsGrid = document.querySelector("#friends-grid");
+const ritualDialog = document.querySelector("#ritual-dialog");
+const ritualForm = document.querySelector("#ritual-form");
+const nextRitual = document.querySelector("#next-ritual");
+const nextRitualDay = document.querySelector("#next-ritual-day");
+const nextRitualDate = document.querySelector("#next-ritual-date");
+const nextRitualHeading = document.querySelector("#next-ritual-heading");
+const nextRitualPreview = document.querySelector("#next-ritual-preview");
 
 const privacyLabels = {
   friends: "My circle",
@@ -77,6 +84,26 @@ const dailyModes = {
     followUp: "Is there one small thing we could make easier for each other this week?",
   },
 };
+
+const ritualTypes = {
+  likely: {
+    title: "Most Likely To",
+    preview: "Who is most likely to accidentally become internet famous?",
+  },
+  rather: {
+    title: "Would You Rather",
+    preview: "Would you rather swap phones for an hour or rooms for a week?",
+  },
+  reflection: {
+    title: "Sunday Reflection",
+    preview: "What is one moment from this week you want to remember?",
+  },
+};
+
+const defaultRituals = [
+  { type: "likely", day: 3 },
+  { type: "reflection", day: 0 },
+];
 
 const historyRecords = {
   "2026-09-18": [
@@ -134,6 +161,52 @@ try {
   circleMessages = { roommates: seededMessages, studio: [], home: [] };
 }
 let activeCircleId = "roommates";
+
+let circleRituals;
+try {
+  circleRituals = JSON.parse(localStorage.getItem("sidequest-circle-rituals") || "{}") || {};
+} catch {
+  circleRituals = {};
+}
+
+function getCircleRituals(circleId = activeCircleId) {
+  return circleRituals[circleId] || defaultRituals;
+}
+
+function getNextRitual(circleId = activeCircleId) {
+  const today = new Date(2026, 8, 19, 12);
+  return getCircleRituals(circleId)
+    .map((ritual) => {
+      let daysAway = (ritual.day - today.getDay() + 7) % 7;
+      if (daysAway === 0) daysAway = 7;
+      const date = new Date(today);
+      date.setDate(today.getDate() + daysAway);
+      return { ...ritual, date };
+    })
+    .sort((a, b) => a.date - b.date)[0];
+}
+
+function renderNextRitual() {
+  const ritual = getNextRitual();
+  nextRitual.hidden = !ritual;
+  if (!ritual) return;
+  const content = ritualTypes[ritual.type];
+  nextRitualDay.textContent = ritual.date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
+  nextRitualDate.textContent = ritual.date.getDate();
+  nextRitualHeading.textContent = content.title;
+  nextRitualPreview.textContent = content.preview;
+}
+
+function openRitualSettings() {
+  const selected = getCircleRituals();
+  ritualForm.querySelectorAll('input[name="ritual"]').forEach((input) => {
+    const ritual = selected.find((item) => item.type === input.value);
+    input.checked = Boolean(ritual);
+    if (ritual) ritualForm.elements[`${input.value}Day`].value = String(ritual.day);
+  });
+  document.querySelector("#ritual-form-error").hidden = true;
+  ritualDialog.showModal();
+}
 
 let customCircles;
 try {
@@ -490,6 +563,7 @@ circleList.addEventListener("click", (event) => {
   roomName.textContent = item.dataset.name || item.querySelector("strong").textContent;
   document.querySelector("#circle-message").placeholder = `Message ${roomName.textContent}...`;
   renderMessages();
+  renderNextRitual();
 });
 
 document.querySelector("#circle-shortcut").addEventListener("click", () => {
@@ -502,6 +576,27 @@ document.querySelector("#new-circle-button").addEventListener("click", () => {
 });
 
 document.querySelector("#close-circle-dialog").addEventListener("click", () => circleDialog.close());
+
+document.querySelector("#ritual-settings-button").addEventListener("click", openRitualSettings);
+document.querySelector("#edit-rituals-button").addEventListener("click", openRitualSettings);
+document.querySelector("#close-ritual-dialog").addEventListener("click", () => ritualDialog.close());
+
+ritualForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const selected = [...ritualForm.querySelectorAll('input[name="ritual"]:checked')];
+  if (selected.length > 2) {
+    document.querySelector("#ritual-form-error").hidden = false;
+    return;
+  }
+  circleRituals[activeCircleId] = selected.map((input) => ({
+    type: input.value,
+    day: Number(ritualForm.elements[`${input.value}Day`].value),
+  }));
+  localStorage.setItem("sidequest-circle-rituals", JSON.stringify(circleRituals));
+  ritualDialog.close();
+  renderNextRitual();
+  showToast(selected.length ? "Circle rituals updated" : "Circle rituals paused");
+});
 
 createCircleForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -567,4 +662,5 @@ renderMode(activeMode);
 updateTodayCalendar();
 customCircles.forEach((circle) => circleList.append(makeCircleListItem(circle)));
 renderMessages();
+renderNextRitual();
 renderRoute();
