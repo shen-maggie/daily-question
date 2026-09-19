@@ -1,7 +1,6 @@
 const form = document.querySelector("#answer-form");
 const answerInput = document.querySelector("#answer");
 const answerLabel = document.querySelector("#answer-label");
-const characterCount = document.querySelector("#character-count");
 const answerCount = document.querySelector("#answer-count");
 const lockedState = document.querySelector("#locked-state");
 const privateState = document.querySelector("#private-state");
@@ -20,8 +19,6 @@ const groupStreakMeter = document.querySelector("#group-streak-meter");
 const circleStreakCopy = document.querySelector("#circle-streak-copy");
 const circleStreakCount = document.querySelector("#circle-streak-count");
 const circleStreakMeter = document.querySelector("#circle-streak-meter");
-const jamieAnswer = document.querySelector("#jamie-answer");
-const alexAnswer = document.querySelector("#alex-answer");
 const conversationPrompt = document.querySelector("#conversation-prompt");
 const modeButtons = document.querySelectorAll(".choice-button");
 const toast = document.querySelector("#toast");
@@ -40,25 +37,16 @@ const roomQuestion = document.querySelector("#circle-room-question");
 const circleFollowup = document.querySelector("#circle-followup");
 const friendSearchForm = document.querySelector("#friend-search-form");
 const friendsGrid = document.querySelector("#friends-grid");
-const ritualDialog = document.querySelector("#ritual-dialog");
-const ritualForm = document.querySelector("#ritual-form");
-const nextRitual = document.querySelector("#next-ritual");
-const nextRitualDay = document.querySelector("#next-ritual-day");
-const nextRitualDate = document.querySelector("#next-ritual-date");
-const nextRitualHeading = document.querySelector("#next-ritual-heading");
-const nextRitualPreview = document.querySelector("#next-ritual-preview");
 const viewCircleAnswers = document.querySelector("#view-circle-answers");
 const answerGate = document.querySelector("#answer-gate");
 
 const privacyLabels = {
   friends: "My circle",
-  public: "Public today",
   private: "Just me",
 };
 
 const privacyClasses = {
   friends: "circle",
-  public: "public",
   private: "private",
 };
 
@@ -70,8 +58,6 @@ const dailyModes = {
     note: "People everywhere get the same question. Pick whatever makes you laugh first.",
     answerLabel: "Your answer",
     placeholder: "The more specific, the better...",
-    jamie: "Everything, Everywhere, Five Minutes Late.",
-    alex: "The Last Clean Mug.",
     followUp: "Which title deserves an actual poster?",
   },
   reflective: {
@@ -81,151 +67,58 @@ const dailyModes = {
     note: "A quieter question for noticing what is already helping, even a little.",
     answerLabel: "Your reflection",
     placeholder: "A person, a habit, a place, a tiny moment...",
-    jamie: "Making coffee before I look at any notifications.",
-    alex: "Calling my sister while I walk home instead of waiting for a perfect time.",
     followUp: "Is there one small thing we could make easier for each other this week?",
   },
 };
 
-const ritualTypes = {
-  likely: {
-    title: "Most Likely To",
-    preview: "Who is most likely to accidentally become internet famous?",
-  },
-  rather: {
-    title: "Would You Rather",
-    preview: "Would you rather swap phones for an hour or rooms for a week?",
-  },
-  reflection: {
-    title: "Sunday Reflection",
-    preview: "What is one moment from this week you want to remember?",
-  },
-};
-
-const defaultRituals = [
-  { type: "likely", day: 3 },
-  { type: "reflection", day: 0 },
-];
-
 const historyRecords = {
   "2026-09-18": [
-    { mode: "fun", privacy: "friends", question: "What tiny inconvenience would you permanently delete from the world?", answer: "Fitted sheets. No object should be that smug and that hard to fold.", shared: "Shared with The roommates · 3 replies" },
+    { mode: "fun", privacy: "friends", question: "What tiny inconvenience would you permanently delete from the world?", answer: "Fitted sheets. No object should be that smug and that hard to fold.", shared: "Shared with friends · 3 replies" },
   ],
   "2026-09-16": [
     { mode: "reflective", privacy: "private", question: "What is something you are learning to be more patient with?", answer: "Not having every part of my future figured out at once.", shared: "Saved just for you" },
   ],
   "2026-09-15": [
-    { mode: "fun", privacy: "public", question: "What would your extremely specific superpower be?", answer: "Always choosing the fastest grocery-store line.", shared: "Posted publicly · Shared with The roommates" },
-    { mode: "reflective", privacy: "friends", question: "Where have you felt most like yourself recently?", answer: "Cooking with everyone in the kitchen, even when nobody is helping.", shared: "Shared with The roommates · 4 replies" },
+    { mode: "fun", privacy: "friends", question: "What would your extremely specific superpower be?", answer: "Always choosing the fastest grocery-store line.", shared: "Shared with friends" },
+    { mode: "reflective", privacy: "friends", question: "Where have you felt most like yourself recently?", answer: "Cooking with everyone in the kitchen, even when nobody is helping.", shared: "Shared with friends · 4 replies" },
   ],
   "2026-09-13": [
-    { mode: "reflective", privacy: "friends", question: "What do you wish your friends asked you about more often?", answer: "The little creative projects I keep almost starting.", shared: "Shared with The roommates · 2 replies" },
+    { mode: "reflective", privacy: "friends", question: "What do you wish your friends asked you about more often?", answer: "The little creative projects I keep almost starting.", shared: "Shared with friends · 2 replies" },
   ],
   "2026-09-12": [
-    { mode: "fun", privacy: "friends", question: "Which fictional home would be the worst place to have roommates?", answer: "The Batcave. Damp, loud, and Bruce would label everything.", shared: "Shared with The roommates · 5 replies" },
+    { mode: "fun", privacy: "friends", question: "Which fictional home would be the worst place to have roommates?", answer: "The Batcave. Damp, loud, and Bruce would label everything.", shared: "Shared with friends · 5 replies" },
   ],
   "2026-09-11": [
-    { mode: "fun", privacy: "friends", question: "What food opinion would get you voted out of the group?", answer: "Cold pizza is better than fresh pizza.", shared: "Shared with The roommates · 7 replies" },
+    { mode: "fun", privacy: "friends", question: "What food opinion would get you voted out of the group?", answer: "Cold pizza is better than fresh pizza.", shared: "Shared with friends · 7 replies" },
   ],
   "2026-09-10": [
     { mode: "reflective", privacy: "private", question: "What has been taking more energy than you expected?", answer: "Keeping up with everyone when I actually need one quiet night.", shared: "Saved just for you" },
   ],
   "2026-09-08": [
-    { mode: "fun", privacy: "friends", question: "What should our group be banned from doing unsupervised?", answer: "Planning trips after midnight.", shared: "Shared with The roommates · 6 replies" },
-    { mode: "reflective", privacy: "friends", question: "What makes you feel cared for without anyone saying anything?", answer: "When someone remembers the snack I like.", shared: "Shared with The roommates · 4 replies" },
+    { mode: "fun", privacy: "friends", question: "What should our group be banned from doing unsupervised?", answer: "Planning trips after midnight.", shared: "Shared with friends · 6 replies" },
+    { mode: "reflective", privacy: "friends", question: "What makes you feel cared for without anyone saying anything?", answer: "When someone remembers the snack I like.", shared: "Shared with friends · 4 replies" },
   ],
   "2026-09-07": [
-    { mode: "fun", privacy: "friends", question: "What is our group chat's unofficial emergency?", answer: "Someone spotting a chair left on the sidewalk.", shared: "Shared with The roommates · 4 replies" },
+    { mode: "fun", privacy: "friends", question: "What is our group chat's unofficial emergency?", answer: "Someone spotting a chair left on the sidewalk.", shared: "Shared with friends · 4 replies" },
   ],
   "2026-09-06": [
-    { mode: "fun", privacy: "public", question: "What is the most dramatic way to leave a boring party?", answer: "Receive a fake call from the moon.", shared: "Posted publicly" },
+    { mode: "fun", privacy: "private", question: "What is the most dramatic way to leave a boring party?", answer: "Receive a fake call from the moon.", shared: "Saved just for you" },
   ],
   "2026-09-05": [
-    { mode: "reflective", privacy: "friends", question: "What is one part of your week you want to protect?", answer: "Sunday mornings with nowhere to be.", shared: "Shared with The roommates · 3 replies" },
+    { mode: "reflective", privacy: "friends", question: "What is one part of your week you want to protect?", answer: "Sunday mornings with nowhere to be.", shared: "Shared with friends · 3 replies" },
   ],
   "2026-09-03": [
-    { mode: "fun", privacy: "friends", question: "What would your warning label say?", answer: "Will reorganize your bookshelf without permission.", shared: "Shared with The roommates · 4 replies" },
+    { mode: "fun", privacy: "friends", question: "What would your warning label say?", answer: "Will reorganize your bookshelf without permission.", shared: "Shared with friends · 4 replies" },
   ],
 };
 
-const seededMessages = [
-  { author: "Jamie", initial: "J", color: "face-yellow", text: "Alex, yours sounds like a horror movie set in our kitchen.", time: "8:41 PM", reactions: 2 },
-  { author: "Alex", initial: "A", color: "face-blue", text: "It was. Someone used the last mug and left it in their room.", time: "8:43 PM", reactions: 1 },
-  { author: "Maya", initial: "M", color: "face-pink", text: "My title is Four People, One Functioning Charger.", time: "8:46 PM", reactions: 3 },
-];
-
 let circleMessages;
 try {
-  const savedCircleMessages = JSON.parse(localStorage.getItem("sidequest-circle-messages") || "null");
-  const legacyMessages = JSON.parse(localStorage.getItem("sidequest-roommates-messages") || "null");
-  circleMessages = savedCircleMessages || { roommates: legacyMessages || seededMessages, studio: [], home: [] };
+  circleMessages = JSON.parse(localStorage.getItem("sidequest-circle-messages-v2") || "{}") || {};
 } catch {
-  circleMessages = { roommates: seededMessages, studio: [], home: [] };
+  circleMessages = {};
 }
-let activeCircleId = "roommates";
-
-let circleRituals;
-try {
-  circleRituals = JSON.parse(localStorage.getItem("sidequest-circle-rituals") || "{}") || {};
-} catch {
-  circleRituals = {};
-}
-
-function getCircleRituals(circleId = activeCircleId) {
-  return circleRituals[circleId] || defaultRituals;
-}
-
-function getNextRitual(circleId = activeCircleId) {
-  const today = new Date(2026, 8, 19, 12);
-  return getCircleRituals(circleId)
-    .map((ritual) => {
-      let daysAway = (ritual.day - today.getDay() + 7) % 7;
-      if (daysAway === 0) daysAway = 7;
-      const date = new Date(today);
-      date.setDate(today.getDate() + daysAway);
-      return { ...ritual, date };
-    })
-    .sort((a, b) => a.date - b.date)[0];
-}
-
-function renderNextRitual() {
-  const ritual = getNextRitual();
-  nextRitual.hidden = !ritual;
-  if (!ritual) return;
-  const content = ritualTypes[ritual.type];
-  nextRitualDay.textContent = ritual.date.toLocaleDateString("en-US", { weekday: "short" }).toUpperCase();
-  nextRitualDate.textContent = ritual.date.getDate();
-  nextRitualHeading.textContent = content.title;
-  nextRitualPreview.textContent = content.preview;
-}
-
-function openRitualSettings() {
-  const selected = getCircleRituals();
-  ritualForm.querySelectorAll('input[name="ritual"]').forEach((input) => {
-    const ritual = selected.find((item) => item.type === input.value);
-    input.checked = Boolean(ritual);
-    if (ritual) ritualForm.elements[`${input.value}Day`].value = String(ritual.day);
-  });
-  syncRitualOptions();
-  ritualDialog.showModal();
-}
-
-function syncRitualOptions(changedInput) {
-  const toggles = [...ritualForm.querySelectorAll('input[name="ritual"]')];
-  const selected = toggles.filter((input) => input.checked);
-  if (selected.length > 2 && changedInput) changedInput.checked = false;
-  const activeCount = toggles.filter((input) => input.checked).length;
-  document.querySelector("#ritual-selection-count").textContent = `${activeCount} of 2 selected`;
-
-  toggles.forEach((input) => {
-    const option = input.closest(".ritual-option");
-    const enabled = input.checked;
-    option.classList.toggle("enabled", enabled);
-    option.querySelector(".day-picker").disabled = !enabled;
-    option.querySelector(".switch b").textContent = enabled ? "On" : "Off";
-    input.disabled = !enabled && activeCount >= 2;
-  });
-}
+let activeCircleId = null;
 
 let customCircles;
 try {
@@ -234,8 +127,7 @@ try {
   customCircles = [];
 }
 
-const savedMode = localStorage.getItem("sidequest-active-mode-001");
-let activeMode = dailyModes[savedMode] ? savedMode : "fun";
+let activeMode = "reflective";
 
 function storageKey(type, mode = activeMode) {
   return `sidequest-${type}-001-${mode}`;
@@ -244,7 +136,7 @@ function storageKey(type, mode = activeMode) {
 function getSaved(mode = activeMode) {
   return {
     answer: localStorage.getItem(storageKey("answer", mode)),
-    privacy: localStorage.getItem(storageKey("privacy", mode)) || "friends",
+    privacy: localStorage.getItem(storageKey("privacy", mode)) || "private",
   };
 }
 
@@ -257,7 +149,7 @@ function getTodayRecords() {
       privacy: saved.privacy,
       question: dailyModes[mode].question,
       answer: saved.answer,
-      shared: saved.privacy === "private" ? "Saved just for you" : saved.privacy === "public" ? "Posted publicly today" : "Shared with The roommates",
+      shared: saved.privacy === "private" ? "Saved just for you" : "Shared with your circle",
     }];
   });
 }
@@ -292,15 +184,16 @@ function renderStreaks() {
 function setFormLocked(locked) {
   answerInput.disabled = locked;
   form.querySelector('button[type="submit"]').disabled = locked;
-  privacyInputs.forEach((input) => { input.disabled = locked; });
+  privacyInputs.forEach((input) => {
+    input.disabled = locked || (input.value === "friends" && !activeCircleId);
+  });
 }
 
 function showLockedState() {
   answerInput.value = "";
   answerCount.textContent = "2 of 4";
-  characterCount.textContent = "0 / 280";
   form.querySelector('button[type="submit"]').innerHTML = 'Lock in answer <span aria-hidden="true">→</span>';
-  privacyInputs.forEach((input) => { input.checked = input.value === "friends"; });
+  privacyInputs.forEach((input) => { input.checked = input.value === (activeCircleId ? "friends" : "private"); });
   setFormLocked(false);
   lockedState.hidden = false;
   privateState.hidden = true;
@@ -310,7 +203,6 @@ function showLockedState() {
 function showCompleted(answer, privacy) {
   answerInput.value = answer;
   form.querySelector('button[type="submit"]').textContent = "Completed today";
-  characterCount.textContent = `${answer.length} / 280`;
   privacyInputs.forEach((input) => { input.checked = input.value === privacy; });
   setFormLocked(true);
   lockedState.hidden = true;
@@ -332,7 +224,6 @@ function showCompleted(answer, privacy) {
 
 function renderMode(mode) {
   activeMode = mode;
-  localStorage.setItem("sidequest-active-mode-001", mode);
   const content = dailyModes[mode];
   const saved = getSaved(mode);
 
@@ -347,8 +238,6 @@ function renderMode(mode) {
   worldNote.textContent = content.note;
   answerLabel.textContent = content.answerLabel;
   answerInput.placeholder = content.placeholder;
-  jamieAnswer.textContent = content.jamie;
-  alexAnswer.textContent = content.alex;
   conversationPrompt.textContent = content.followUp;
   roomQuestion.textContent = content.question;
   circleFollowup.textContent = content.followUp;
@@ -363,27 +252,6 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.add("visible");
   window.setTimeout(() => toast.classList.remove("visible"), 2400);
-}
-
-async function shareToChat(includeFollowUp = true) {
-  const content = dailyModes[activeMode];
-  const followUp = includeFollowUp ? `\n\nConversation spark: ${content.followUp}` : "";
-  const shareData = {
-    title: "Today's Sidequest",
-    text: `${content.label}: ${content.question}${followUp}`,
-    url: `${window.location.origin}${window.location.pathname}#today`,
-  };
-
-  try {
-    if (navigator.share) {
-      await navigator.share(shareData);
-    } else {
-      await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
-      showToast("Ready to paste into your group chat");
-    }
-  } catch (error) {
-    if (error.name !== "AbortError") showToast("Couldn't share this time");
-  }
 }
 
 function makeMessage(message) {
@@ -403,18 +271,7 @@ function makeMessage(message) {
   const meta = document.createElement("div");
   meta.className = "message-meta";
   meta.append(author, time);
-  const reaction = document.createElement("button");
-  reaction.className = "message-reaction";
-  reaction.type = "button";
-  reaction.setAttribute("aria-label", `React to ${message.author}'s message`);
-  reaction.innerHTML = `♡ <span>${message.reactions || 0}</span>`;
-  reaction.addEventListener("click", () => {
-    const active = reaction.classList.toggle("active");
-    const count = reaction.querySelector("span");
-    count.textContent = String(Number(count.textContent) + (active ? 1 : -1));
-    reaction.firstChild.textContent = active ? "♥ " : "♡ ";
-  });
-  bubble.append(meta, text, reaction);
+  bubble.append(meta, text);
   item.append(avatar, bubble);
   return item;
 }
@@ -434,12 +291,49 @@ function renderMessages() {
   });
 }
 
-function postMessage(text, circleId) {
+async function postMessage(text, circleId) {
+  if (!circleId) return;
   if (!circleMessages[circleId]) circleMessages[circleId] = [];
-  circleMessages[circleId].push({ author: "You", initial: "You", color: "face-green", text, time: "Now", reactions: 0 });
-  localStorage.setItem("sidequest-circle-messages", JSON.stringify(circleMessages));
+  circleMessages[circleId].push({ author: "You", initial: "You", color: "face-green", text, time: "Now" });
+  localStorage.setItem("sidequest-circle-messages-v2", JSON.stringify(circleMessages));
   renderMessages();
-  showToast(`Message sent to ${circleId === "roommates" ? "The roommates" : roomName.textContent}`);
+  showToast(`Message sent to ${roomName.textContent}`);
+  if (window.sidequestBackend?.enabled) {
+    try {
+      await window.sidequestBackend.sendMessage(text);
+    } catch (error) {
+      console.error("Supabase message failed", error);
+      showToast("Saved here, but the shared message did not send");
+    }
+  }
+}
+
+async function refreshSharedMessages() {
+  if (!window.sidequestBackend?.enabled) return;
+  const messages = await window.sidequestBackend.loadMessages();
+  circleMessages[activeCircleId] = messages;
+  renderMessages();
+}
+
+async function startBackend() {
+  if (!window.sidequestBackend?.enabled) return;
+  try {
+    const state = await window.sidequestBackend.init();
+    if (state.circleId) {
+      activeCircleId = state.circleId;
+      circleMessages[activeCircleId] ||= [];
+      if (!circleList.querySelector(`[data-circle="${state.circleId}"]`)) {
+        const item = makeCircleListItem({ id: state.circleId, name: state.circleName || "Your circle", members: [] });
+        circleList.append(item);
+        item.click();
+      }
+      await refreshSharedMessages();
+      window.sidequestBackend.subscribeToMessages(() => refreshSharedMessages().catch(console.error));
+    }
+  } catch (error) {
+    console.error("Supabase startup failed", error);
+    showToast("Shared mode is unavailable. Continuing locally.");
+  }
 }
 
 function makeCircleListItem(circle) {
@@ -459,6 +353,18 @@ function makeCircleListItem(circle) {
   copy.append(name, status);
   button.append(avatar, copy);
   return button;
+}
+
+function syncCircleState() {
+  const hasCircles = circleList.children.length > 0;
+  document.querySelector("#circle-empty").hidden = hasCircles;
+  document.querySelector("#circle-room").hidden = !hasCircles || !activeCircleId;
+  document.querySelector("#circle-shortcut").hidden = !hasCircles;
+  document.querySelector("#today-circle-streak").hidden = !hasCircles;
+  document.querySelector("#today-circle-status").hidden = !hasCircles;
+  document.querySelector("#today-room").hidden = !hasCircles;
+  const circlePrivacy = form.querySelector('input[value="friends"]');
+  circlePrivacy.disabled = !hasCircles || answerInput.disabled;
 }
 
 function addFriendRow(username) {
@@ -584,24 +490,16 @@ document.querySelectorAll("[data-message-form]").forEach((messageForm) => {
   });
 });
 
-document.querySelectorAll(".reaction-button").forEach((button) => {
-  button.addEventListener("click", () => {
-    const count = button.querySelector("span");
-    const active = button.classList.toggle("active");
-    button.firstChild.textContent = active ? "♥ " : "♡ ";
-    count.textContent = String(Number(count.textContent) + (active ? 1 : -1));
-  });
-});
-
 circleList.addEventListener("click", (event) => {
   const item = event.target.closest(".circle-list-item");
   if (!item) return;
   activeCircleId = item.dataset.circle;
   circleList.querySelectorAll(".circle-list-item").forEach((button) => button.classList.toggle("active", button === item));
   roomName.textContent = item.dataset.name || item.querySelector("strong").textContent;
+  document.querySelector("#circle-shortcut-name").textContent = roomName.textContent;
   document.querySelector("#circle-message").placeholder = `Message ${roomName.textContent}...`;
   renderMessages();
-  renderNextRitual();
+  syncCircleState();
 });
 
 document.querySelector("#circle-shortcut").addEventListener("click", () => {
@@ -613,11 +511,11 @@ document.querySelector("#new-circle-button").addEventListener("click", () => {
   circleDialog.showModal();
 });
 
-document.querySelector("#close-circle-dialog").addEventListener("click", () => circleDialog.close());
+document.querySelector("#empty-create-circle").addEventListener("click", () => {
+  document.querySelector("#new-circle-button").click();
+});
 
-document.querySelector("#ritual-settings-button").addEventListener("click", openRitualSettings);
-document.querySelector("#edit-rituals-button").addEventListener("click", openRitualSettings);
-document.querySelector("#close-ritual-dialog").addEventListener("click", () => ritualDialog.close());
+document.querySelector("#close-circle-dialog").addEventListener("click", () => circleDialog.close());
 
 viewCircleAnswers.addEventListener("click", () => {
   if (getSaved(activeMode).answer) {
@@ -630,24 +528,7 @@ viewCircleAnswers.addEventListener("click", () => {
   answerGate.scrollIntoView({ behavior: "smooth", block: "center" });
 });
 
-ritualForm.querySelectorAll('input[name="ritual"]').forEach((input) => {
-  input.addEventListener("change", () => syncRitualOptions(input));
-});
-
-ritualForm.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const selected = [...ritualForm.querySelectorAll('input[name="ritual"]:checked')];
-  circleRituals[activeCircleId] = selected.map((input) => ({
-    type: input.value,
-    day: Number(ritualForm.elements[`${input.value}Day`].value),
-  }));
-  localStorage.setItem("sidequest-circle-rituals", JSON.stringify(circleRituals));
-  ritualDialog.close();
-  renderNextRitual();
-  showToast(selected.length ? "Circle rituals updated" : "Circle rituals paused");
-});
-
-createCircleForm.addEventListener("submit", (event) => {
+createCircleForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   const name = createCircleForm.elements.circleName.value.trim();
   const members = [...createCircleForm.querySelectorAll('input[name="members"]:checked')].map((input) => input.value);
@@ -655,9 +536,18 @@ createCircleForm.addEventListener("submit", (event) => {
     document.querySelector("#circle-form-error").hidden = false;
     return;
   }
-  const circle = { id: `circle-${Date.now()}`, name, members };
+  let circle = { id: `circle-${Date.now()}`, name, members };
+  if (window.sidequestBackend?.enabled) {
+    try {
+      const created = await window.sidequestBackend.createCircle(name);
+      circle = { ...circle, id: created.id };
+    } catch (error) {
+      console.error("Supabase circle creation failed", error);
+      showToast("Created on this device, but live sync is unavailable");
+    }
+  }
   circleMessages[circle.id] = [];
-  localStorage.setItem("sidequest-circle-messages", JSON.stringify(circleMessages));
+  localStorage.setItem("sidequest-circle-messages-v2", JSON.stringify(circleMessages));
   customCircles.push(circle);
   localStorage.setItem("sidequest-custom-circles", JSON.stringify(customCircles));
   const item = makeCircleListItem(circle);
@@ -684,11 +574,7 @@ friendSearchForm.addEventListener("submit", (event) => {
   showToast(`Friend request sent to ${username}`);
 });
 
-answerInput.addEventListener("input", () => {
-  characterCount.textContent = `${answerInput.value.length} / 280`;
-});
-
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const answer = answerInput.value.trim();
   if (!answer) return;
@@ -700,16 +586,23 @@ form.addEventListener("submit", (event) => {
   updateTodayCalendar();
   document.querySelector("#reveal-panel").scrollIntoView({ behavior: "smooth" });
   showToast(privacy === "private" ? "Saved just for you. Your streak is safe." : "Shared. Your streak is safe.");
+  if (window.sidequestBackend?.enabled) {
+    try {
+      await window.sidequestBackend.saveAnswer(activeMode, answer, privacy);
+    } catch (error) {
+      console.error("Supabase answer failed", error);
+      showToast("Saved here, but the shared answer did not sync");
+    }
+  }
 });
 
-document.querySelector("#share-button").addEventListener("click", () => shareToChat(true));
-document.querySelector("#share-chat-button").addEventListener("click", () => shareToChat(true));
-document.querySelector("#share-question-button").addEventListener("click", () => shareToChat(false));
 window.addEventListener("hashchange", renderRoute);
 
 renderMode(activeMode);
 updateTodayCalendar();
 customCircles.forEach((circle) => circleList.append(makeCircleListItem(circle)));
+if (circleList.firstElementChild) circleList.firstElementChild.click();
+syncCircleState();
 renderMessages();
-renderNextRitual();
 renderRoute();
+startBackend();
