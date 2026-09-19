@@ -5,6 +5,10 @@ in touch. The daily question is global; answers, reveals, and discussion prompts
 are private to each friend group. Discord and Messages bring the conversation
 back to the chat people already use.
 
+Each daily answer defaults to friends-only. A person can instead make that
+day's answer public on the worldwide response wall or keep it entirely private.
+The visibility choice resets for every new question.
+
 ## Current Prototype
 
 Open `dist/index.html` or serve the `dist` directory locally. The prototype

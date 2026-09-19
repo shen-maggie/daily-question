@@ -10,10 +10,19 @@ const shareButtons = [
   document.querySelector("#share-chat-button"),
 ];
 const toast = document.querySelector("#toast");
+const privacyInputs = document.querySelectorAll('input[name="privacy"]');
+const privacyResult = document.querySelector("#privacy-result");
 
 const savedAnswer = localStorage.getItem("sidequest-answer-001");
+const savedPrivacy = localStorage.getItem("sidequest-privacy-001") || "friends";
 
-function reveal(answer) {
+const privacyLabels = {
+  friends: "Friends only",
+  public: "Public today",
+  private: "Just me",
+};
+
+function reveal(answer, privacy = savedPrivacy) {
   answerInput.value = answer;
   answerInput.disabled = true;
   form.querySelector("button").textContent = "Answer locked in";
@@ -21,6 +30,11 @@ function reveal(answer) {
   characterCount.textContent = `${answer.length} / 280`;
   answerCount.textContent = "3 of 4";
   yourAnswer.textContent = answer;
+  privacyResult.textContent = privacyLabels[privacy] || privacyLabels.friends;
+  privacyInputs.forEach((input) => {
+    input.checked = input.value === privacy;
+    input.disabled = true;
+  });
   lockedState.hidden = true;
   revealedState.hidden = false;
 }
@@ -58,8 +72,10 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
   const answer = answerInput.value.trim();
   if (!answer) return;
+  const privacy = form.elements.privacy.value;
   localStorage.setItem("sidequest-answer-001", answer);
-  reveal(answer);
+  localStorage.setItem("sidequest-privacy-001", privacy);
+  reveal(answer, privacy);
   document.querySelector("#reveal-panel").scrollIntoView({ behavior: "smooth" });
   showToast("Answer locked in. Responses revealed.");
 });

@@ -23,6 +23,10 @@
           <span class="brand-mark" aria-hidden="true">S</span>
           <span>sidequest</span>
         </a>
+        <div class="world-pulse" aria-label="Worldwide daily question">
+          <span aria-hidden="true"></span>
+          One question, everywhere
+        </div>
         <button class="group-switcher" type="button" aria-label="Switch group">
           <span class="group-avatars" aria-hidden="true">
             <span>SG</span><span>JK</span><span>AM</span>
@@ -36,13 +40,15 @@
         <section class="today-layout" aria-labelledby="question-heading">
           <div class="question-column">
             <div class="question-meta">
-              <span>Question 001</span>
+              <span>Today's worldwide question</span>
               <span>September 19</span>
             </div>
 
             <h1 id="question-heading">
               What is something you want the group to make time for this fall?
             </h1>
+
+            <p class="world-note">People everywhere are answering this today. Only the audience you choose can see yours.</p>
 
             <div class="status-row" aria-label="Group participation">
               <div class="response-faces" aria-hidden="true">
@@ -71,10 +77,26 @@
                   Lock in answer <span aria-hidden="true">→</span>
                 </button>
               </div>
+
+              <fieldset class="privacy-picker">
+                <legend>Who can see this answer?</legend>
+                <label>
+                  <input type="radio" name="privacy" value="friends" checked />
+                  <span><strong>Friends only</strong><small>Your circles can reveal it after answering.</small></span>
+                </label>
+                <label>
+                  <input type="radio" name="privacy" value="public" />
+                  <span><strong>Public today</strong><small>Add it to the worldwide response wall.</small></span>
+                </label>
+                <label>
+                  <input type="radio" name="privacy" value="private" />
+                  <span><strong>Just me</strong><small>Keep it as a private note.</small></span>
+                </label>
+              </fieldset>
             </form>
 
             <p class="privacy-note">
-              Everyone answers independently. Your group's responses unlock after you answer.
+              Your visibility choice resets every day. Friends still answer independently before seeing yours.
             </p>
           </div>
 
@@ -82,8 +104,8 @@
             <div class="locked-state" id="locked-state">
               <span class="lock-icon" aria-hidden="true">✦</span>
               <p class="eyebrow">Friends' answers</p>
-              <h2>No peeking yet.</h2>
-              <p>Lock in your own answer to reveal what Jamie and Alex said.</p>
+              <h2>A little mystery first.</h2>
+              <p>Share your own thought to reveal what Jamie and Alex said. No one gets influenced by the first answer.</p>
               <div class="waiting-lines" aria-hidden="true">
                 <span></span><span></span><span></span>
               </div>
@@ -92,7 +114,7 @@
             <div class="revealed-state" id="revealed-state" hidden>
               <div class="panel-heading">
                 <div>
-                  <p class="eyebrow">The roommates</p>
+                  <p class="eyebrow">The roommates · <span id="privacy-result">Friends only</span></p>
                   <h2>Answers are in.</h2>
                 </div>
                 <button class="icon-button" id="share-button" type="button" aria-label="Share results" title="Share results">↗</button>
@@ -129,11 +151,15 @@
         </section>
 
         <section class="how-it-works" aria-label="Daily rhythm">
-          <p class="eyebrow">One question. Your people.</p>
+          <div class="section-intro">
+            <p class="eyebrow">One shared moment</p>
+            <h2>The question is global. The closeness is local.</h2>
+            <p>Everyone gets the same starting point, but the good part happens with the people who know you.</p>
+          </div>
           <div class="rhythm-steps">
-            <div><span>01</span><p>Answer without being influenced.</p></div>
-            <div><span>02</span><p>Reveal how your friends think.</p></div>
-            <div><span>03</span><p>Keep talking in your group chat.</p></div>
+            <div><span>01 · WORLD</span><p>One universal question gives everyone a reason to show up.</p></div>
+            <div><span>02 · CIRCLES</span><p>Friends reveal answers together, BeReal-style.</p></div>
+            <div><span>03 · CHAT</span><p>A thoughtful follow-up carries the conversation into your group chat.</p></div>
           </div>
         </section>
       </main>
