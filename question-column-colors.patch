@@ -1,0 +1,60 @@
+diff --git a/dist/app.js b/dist/app.js
+index 1f4c3f5..c5fcedd 100644
+--- a/dist/app.js
++++ b/dist/app.js
+@@ -24,6 +24,7 @@ const jamieAnswer = document.querySelector("#jamie-answer");
+ const alexAnswer = document.querySelector("#alex-answer");
+ const conversationPrompt = document.querySelector("#conversation-prompt");
+ const modeButtons = document.querySelectorAll(".choice-button");
++const questionColumn = document.querySelector(".question-column");
+ const toast = document.querySelector("#toast");
+ const todaySections = document.querySelectorAll(".today-only");
+ const historyView = document.querySelector("#history-view");
+@@ -342,6 +343,9 @@ function renderMode(mode) {
+     button.setAttribute("aria-pressed", String(selected));
+   });
+ 
++  questionColumn.classList.toggle("mode-fun", mode === "fun");
++  questionColumn.classList.toggle("mode-reflective", mode === "reflective");
++
+   dailyLabel.textContent = content.label;
+   questionHeading.textContent = content.question;
+   worldNote.textContent = content.note;
+diff --git a/dist/index.html b/dist/index.html
+index a6bca78..6ae38d0 100644
+--- a/dist/index.html
++++ b/dist/index.html
+@@ -44,7 +44,7 @@
+ 
+       <main>
+         <section class="today-layout today-only" aria-labelledby="question-heading">
+-          <div class="question-column">
++          <div class="question-column mode-fun">
+             <div class="daily-choice" aria-label="Choose today's path">
+               <button class="choice-button active" type="button" data-mode="fun" aria-pressed="true">
+                 <span class="choice-icon" aria-hidden="true">☺</span>
+diff --git a/dist/styles.css b/dist/styles.css
+index 9e6e454..f6e98b1 100644
+--- a/dist/styles.css
++++ b/dist/styles.css
+@@ -6,6 +6,7 @@
+   --blue: #9dbfe8;
+   --blue-soft: #dfeaf3;
+   --pink: #ef9c8f;
++  --pink-soft: #fbe1db;
+   --green: #99c7ad;
+   --line: #c9cbc2;
+   --soft: #f2eee5;
+@@ -140,8 +141,12 @@ button { color: inherit; }
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
++  transition: background-color 0.3s ease;
+ }
+ 
++.question-column.mode-fun { background: var(--pink-soft); }
++.question-column.mode-reflective { background: var(--blue-soft); }
++
+ .daily-choice {
+   width: min(100%, 650px);
+   margin-bottom: 34px;
