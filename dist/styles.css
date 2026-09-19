@@ -608,6 +608,9 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   font-weight: 900;
 }
 .circle-list { display: grid; gap: 7px; }
+.circle-empty { margin-top: 18px; padding: 20px 0; border-top: 1px solid var(--line); }
+.circle-empty strong { display: block; font-family: Georgia, "Times New Roman", serif; font-size: 1.35rem; }
+.circle-empty p { margin: 7px 0 14px; color: #69716d; line-height: 1.45; }
 .circle-list-item {
   width: 100%;
   min-height: 72px;

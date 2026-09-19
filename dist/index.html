@@ -33,11 +33,11 @@
           <a href="#history">History</a>
           <a href="#friends">Friends</a>
         </nav>
-        <button class="group-switcher" id="circle-shortcut" type="button" aria-label="Open The roommates circle">
+        <button class="group-switcher" id="circle-shortcut" type="button" aria-label="Open circles" hidden>
           <span class="group-avatars" aria-hidden="true">
             <span>SG</span><span>JK</span><span>AM</span>
           </span>
-          <span>The roommates</span>
+          <span id="circle-shortcut-name">Your circle</span>
           <span aria-hidden="true">⌄</span>
         </button>
       </header>
@@ -45,29 +45,29 @@
       <main>
         <section class="today-layout today-only" aria-labelledby="question-heading">
           <div class="question-column">
-            <div class="daily-choice" aria-label="Choose today's path">
-              <button class="choice-button active" type="button" data-mode="fun" aria-pressed="true">
-                <span class="choice-icon" aria-hidden="true">☺</span>
-                <span><strong>Fun question</strong><small>Quick, playful, social</small></span>
-              </button>
-              <button class="choice-button" type="button" data-mode="reflective" aria-pressed="false">
+            <div class="daily-choice" aria-label="Today's questions">
+              <button class="choice-button active" type="button" data-mode="reflective" aria-pressed="true">
                 <span class="choice-icon" aria-hidden="true">✦</span>
-                <span><strong>Reflective question</strong><small>A little more thoughtful</small></span>
+                <span><strong>Reflective question</strong><small>Start here</small></span>
+              </button>
+              <button class="choice-button" type="button" data-mode="fun" aria-pressed="false">
+                <span class="choice-icon" aria-hidden="true">☺</span>
+                <span><strong>See the fun question</strong><small>Quick and playful →</small></span>
               </button>
             </div>
 
             <div class="question-meta">
-              <span id="daily-label">Today's worldwide fun question</span>
+              <span id="daily-label">Today's worldwide reflective question</span>
               <span>September 19</span>
             </div>
 
             <h1 id="question-heading">
-              If today had a movie title, what would it be?
+              What is something small that has made life feel lighter lately?
             </h1>
 
-            <p class="world-note" id="world-note">People everywhere get the same question. Pick whatever makes you laugh first.</p>
+            <p class="world-note" id="world-note">A quieter question for noticing what is already helping, even a little.</p>
 
-            <div class="status-row" aria-label="Group participation">
+            <div class="status-row" id="today-circle-status" aria-label="Group participation" hidden>
               <div class="response-faces" aria-hidden="true">
                 <span class="face face-yellow">J</span>
                 <span class="face face-blue">A</span>
@@ -86,9 +86,9 @@
                 <p id="personal-streak-status">Answer either question to keep it going.</p>
                 <div class="streak-meter" aria-hidden="true"><span id="personal-streak-meter"></span></div>
               </article>
-              <article class="streak-card circle-streak">
+              <article class="streak-card circle-streak" id="today-circle-streak" hidden>
                 <div class="streak-card-heading">
-                  <span class="streak-kicker">The roommates</span>
+                  <span class="streak-kicker">Your circle</span>
                   <strong>6 days</strong>
                 </div>
                 <p id="group-streak-status">Streak secured · 2 of 4 answered today.</p>
@@ -102,12 +102,10 @@
                 id="answer"
                 name="answer"
                 rows="4"
-                maxlength="280"
                 placeholder="The more specific, the better..."
                 required
               ></textarea>
               <div class="form-footer">
-                <span id="character-count">0 / 280</span>
                 <button class="primary-button" type="submit">
                   Lock in answer <span aria-hidden="true">→</span>
                 </button>
@@ -116,22 +114,18 @@
               <fieldset class="privacy-picker">
                 <legend>Who can see this answer?</legend>
                 <label>
-                  <input type="radio" name="privacy" value="friends" checked />
+                  <input type="radio" name="privacy" value="friends" disabled />
                   <span><strong>My circle</strong><small>Mutual reveal with this friend group.</small></span>
                 </label>
                 <label>
-                  <input type="radio" name="privacy" value="public" />
-                  <span><strong>Public today</strong><small>Add it to today's worldwide responses.</small></span>
-                </label>
-                <label>
-                  <input type="radio" name="privacy" value="private" />
+                  <input type="radio" name="privacy" value="private" checked />
                   <span><strong>Just me</strong><small>Keep it as a private note.</small></span>
                 </label>
               </fieldset>
             </form>
 
             <p class="privacy-note">
-              Your visibility choice resets every day. Friends still answer independently before seeing yours.
+              Circle answers unlock only after you submit your own. Choose “Just me” to keep yours private.
             </p>
           </div>
 
@@ -166,29 +160,17 @@
                 <strong>Your answer</strong>
                 <p id="private-answer-text"></p>
               </div>
-              <button class="share-chat-button" id="share-question-button" type="button">
-                Send question to group chat <span aria-hidden="true">↗</span>
-              </button>
             </div>
 
             <div class="revealed-state" id="revealed-state" hidden>
               <div class="panel-heading">
                 <div>
-                  <p class="eyebrow">The roommates · <span id="privacy-result">My circle</span></p>
+                  <p class="eyebrow">Your circle · <span id="privacy-result">My circle</span></p>
                   <h2>Answers are in.</h2>
                 </div>
-                <button class="icon-button" id="share-button" type="button" aria-label="Share results" title="Share results">↗</button>
               </div>
 
               <div class="answer-list">
-                <article class="friend-answer">
-                  <span class="face face-yellow">J</span>
-                  <div><strong>Jamie</strong><p id="jamie-answer">Everything, Everywhere, Five Minutes Late.</p><button class="reaction-button" type="button" data-reaction="Jamie">♡ <span>2</span></button></div>
-                </article>
-                <article class="friend-answer">
-                  <span class="face face-blue">A</span>
-                  <div><strong>Alex</strong><p id="alex-answer">The Last Clean Mug.</p><button class="reaction-button" type="button" data-reaction="Alex">♡ <span>1</span></button></div>
-                </article>
                 <article class="friend-answer yours">
                   <span class="face face-green">You</span>
                   <div><strong>You</strong><p id="your-answer"></p></div>
@@ -203,11 +185,7 @@
                 </div>
               </div>
 
-              <button class="share-chat-button" id="share-chat-button" type="button">
-                Share conversation spark <span aria-hidden="true">↗</span>
-              </button>
-
-              <section class="daily-room" aria-labelledby="today-room-heading">
+              <section class="daily-room" id="today-room" aria-labelledby="today-room-heading" hidden>
                 <div class="room-heading">
                   <div>
                     <p class="eyebrow">Today's room</p>
@@ -215,28 +193,15 @@
                   </div>
                   <span class="room-members">4 here</span>
                 </div>
-                <div class="room-messages" data-room-messages="roommates"></div>
-                <form class="message-form" data-message-form="roommates">
+                <div class="room-messages" data-room-messages="active"></div>
+                <form class="message-form" data-message-form="active">
                   <label class="sr-only" for="today-message">Reply to your circle</label>
-                  <input id="today-message" name="message" maxlength="240" placeholder="Reply to the circle..." required />
+                  <input id="today-message" name="message" placeholder="Reply to the circle..." required />
                   <button type="submit" aria-label="Send reply" title="Send reply">↑</button>
                 </form>
               </section>
             </div>
           </aside>
-        </section>
-
-        <section class="how-it-works today-only" aria-label="Daily rhythm">
-          <div class="section-intro">
-            <p class="eyebrow">One shared moment</p>
-            <h2>Pick what you need today. Either one keeps the ritual going.</h2>
-            <p>The world gets the same two questions each day. Your group can be silly together, think more deeply, or split between both.</p>
-          </div>
-          <div class="rhythm-steps">
-            <div><svg class="step-doodle" viewBox="0 0 64 64" aria-hidden="true"><path d="M13 13h38v32H29L17 54v-9h-4z"/><path d="M22 25h20M22 33h13"/></svg><span>01 · CHOOSE</span><p>Answer the fun question or the reflective question.</p></div>
-            <div><svg class="step-doodle blue" viewBox="0 0 64 64" aria-hidden="true"><circle cx="25" cy="30" r="14"/><circle cx="41" cy="30" r="14"/><path d="M17 49h32"/></svg><span>02 · REVEAL</span><p>Either choice keeps your streak and unlocks friends on that path.</p></div>
-            <div><svg class="step-doodle pink" viewBox="0 0 64 64" aria-hidden="true"><path d="M10 15h34v27H25L15 50v-8h-5z"/><path d="M37 24h17v22H43l-7 6"/></svg><span>03 · TALK</span><p>A tailored follow-up carries the moment into your group chat.</p></div>
-          </div>
         </section>
 
         <section class="history-view" id="history-view" hidden aria-labelledby="history-heading">
@@ -276,17 +241,6 @@
               <button class="calendar-day" type="button" data-date="2026-09-17">17</button>
               <button class="calendar-day has-fun selected" type="button" data-date="2026-09-18">18</button>
               <button class="calendar-day today" type="button" data-date="2026-09-19">19</button>
-              <button class="calendar-day future" type="button" disabled>20</button>
-              <button class="calendar-day future" type="button" disabled>21</button>
-              <button class="calendar-day future" type="button" disabled>22</button>
-              <button class="calendar-day future" type="button" disabled>23</button>
-              <button class="calendar-day future" type="button" disabled>24</button>
-              <button class="calendar-day future" type="button" disabled>25</button>
-              <button class="calendar-day future" type="button" disabled>26</button>
-              <button class="calendar-day future" type="button" disabled>27</button>
-              <button class="calendar-day future" type="button" disabled>28</button>
-              <button class="calendar-day future" type="button" disabled>29</button>
-              <button class="calendar-day future" type="button" disabled>30</button>
             </div>
 
             <aside class="history-detail" id="history-detail" aria-live="polite">
@@ -294,7 +248,7 @@
               <div class="history-badges" id="history-badges"><span class="history-badge fun">Fun question</span><span class="history-badge circle">My circle</span></div>
               <h2 id="history-question">What tiny inconvenience would you permanently delete from the world?</h2>
               <blockquote id="history-answer">“Fitted sheets. No object should be that smug and that hard to fold.”</blockquote>
-              <p class="history-shared" id="history-shared">Shared with The roommates · 3 replies</p>
+              <p class="history-shared" id="history-shared">Shared with friends · 3 replies</p>
             </aside>
           </div>
         </section>
@@ -305,32 +259,18 @@
               <div><p class="eyebrow">Your people</p><h1 id="circles-heading">Circles</h1></div>
               <button class="add-icon-button" id="new-circle-button" type="button" aria-label="Create a circle" title="Create a circle">+</button>
             </div>
-            <div class="circle-list" id="circle-list">
-              <button class="circle-list-item active" type="button" data-circle="roommates">
-                <span class="circle-avatar coral">TR</span>
-                <span><strong>The roommates</strong><small>3 new replies · 4 members</small></span>
-                <i aria-hidden="true">3</i>
-              </button>
-              <button class="circle-list-item" type="button" data-circle="studio">
-                <span class="circle-avatar blue">DS</span>
-                <span><strong>Design table</strong><small>Waiting for 2 answers · 5 members</small></span>
-              </button>
-              <button class="circle-list-item" type="button" data-circle="home">
-                <span class="circle-avatar green">HF</span>
-                <span><strong>Home friends</strong><small>Yesterday · 6 members</small></span>
-              </button>
-            </div>
+            <div class="circle-list" id="circle-list"></div>
+            <div class="circle-empty" id="circle-empty"><strong>No circles yet</strong><p>Create one to answer and chat with friends.</p><button class="text-button" id="empty-create-circle" type="button">Create a circle</button></div>
           </aside>
 
-          <div class="circle-room">
+          <div class="circle-room" id="circle-room" hidden>
             <header class="circle-room-header">
               <div>
                 <p class="eyebrow">Today's daily room</p>
-                <h2 id="circle-room-name">The roommates</h2>
+                <h2 id="circle-room-name">Your circle</h2>
               </div>
               <div class="circle-header-actions">
-                <div class="mini-faces" aria-label="Four circle members"><span>J</span><span>A</span><span>M</span><span>You</span></div>
-                <button class="ritual-settings-button" id="ritual-settings-button" type="button">Rituals</button>
+                <div class="mini-faces" aria-label="Circle members"><span>You</span></div>
               </div>
             </header>
 
@@ -356,19 +296,6 @@
               <a href="#today">Answer today's question</a>
             </div>
 
-            <section class="next-ritual" id="next-ritual" aria-labelledby="next-ritual-heading">
-              <div class="ritual-date">
-                <span id="next-ritual-day">WED</span>
-                <strong id="next-ritual-date">23</strong>
-              </div>
-              <div>
-                <p class="eyebrow">Coming up in your circle</p>
-                <h3 id="next-ritual-heading">Most Likely To</h3>
-                <p id="next-ritual-preview">Who is most likely to accidentally become internet famous?</p>
-              </div>
-              <button class="text-button" id="edit-rituals-button" type="button">Edit schedule</button>
-            </section>
-
             <section class="circle-conversation" aria-labelledby="circle-chat-heading">
               <header class="conversation-header">
                 <div><p class="eyebrow">Circle chat</p><h3 id="circle-chat-heading">Today’s conversation</h3></div>
@@ -384,7 +311,7 @@
 
               <form class="message-form circle-message-form" data-message-form="active">
                 <label class="sr-only" for="circle-message">Message this circle</label>
-                <input id="circle-message" name="message" maxlength="240" placeholder="Message The roommates..." required />
+                <input id="circle-message" name="message" placeholder="Message your circle..." required />
                 <button type="submit" aria-label="Send message" title="Send message">↑</button>
                 <small>Press Enter to send · Everyone in this circle can reply</small>
               </form>
@@ -444,33 +371,11 @@
         </form>
       </dialog>
 
-      <dialog class="circle-dialog ritual-dialog" id="ritual-dialog">
-        <form method="dialog" id="ritual-form">
-          <div class="dialog-heading">
-            <div><p class="eyebrow">The roommates</p><h2>Circle rituals</h2><p>Add a little variety to the week. Rituals are optional and never affect personal streaks.</p></div>
-            <button class="icon-button dark" id="close-ritual-dialog" type="button" aria-label="Close ritual settings">×</button>
-          </div>
-          <div class="ritual-limit"><span>Weekly schedule</span><strong id="ritual-selection-count">2 of 2 selected</strong></div>
-          <div class="ritual-options">
-            <article class="ritual-option" data-ritual-option="likely">
-              <div class="ritual-option-heading"><span class="ritual-copy"><strong>Most Likely To</strong><small>Vote for someone, then reveal together.</small></span><label class="switch"><input type="checkbox" name="ritual" value="likely" checked /><span aria-hidden="true"></span><b>On</b></label></div>
-              <fieldset class="day-picker"><legend>Runs on</legend><label><input type="radio" name="likelyDay" value="3" checked /><span>Wed</span></label><label><input type="radio" name="likelyDay" value="5" /><span>Fri</span></label><label><input type="radio" name="likelyDay" value="0" /><span>Sun</span></label></fieldset>
-            </article>
-            <article class="ritual-option" data-ritual-option="rather">
-              <div class="ritual-option-heading"><span class="ritual-copy"><strong>Would You Rather</strong><small>Pick a side and defend it in the room.</small></span><label class="switch"><input type="checkbox" name="ritual" value="rather" /><span aria-hidden="true"></span><b>Off</b></label></div>
-              <fieldset class="day-picker" disabled><legend>Runs on</legend><label><input type="radio" name="ratherDay" value="3" /><span>Wed</span></label><label><input type="radio" name="ratherDay" value="5" checked /><span>Fri</span></label><label><input type="radio" name="ratherDay" value="0" /><span>Sun</span></label></fieldset>
-            </article>
-            <article class="ritual-option" data-ritual-option="reflection">
-              <div class="ritual-option-heading"><span class="ritual-copy"><strong>Sunday Reflection</strong><small>A slower prompt for ending the week together.</small></span><label class="switch"><input type="checkbox" name="ritual" value="reflection" checked /><span aria-hidden="true"></span><b>On</b></label></div>
-              <fieldset class="day-picker"><legend>Runs on</legend><label><input type="radio" name="reflectionDay" value="3" /><span>Wed</span></label><label><input type="radio" name="reflectionDay" value="5" /><span>Fri</span></label><label><input type="radio" name="reflectionDay" value="0" checked /><span>Sun</span></label></fieldset>
-            </article>
-          </div>
-          <button class="primary-button dialog-submit" value="default" type="submit">Save circle rituals</button>
-        </form>
-      </dialog>
-
       <div class="toast" id="toast" role="status" aria-live="polite"></div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./config.js"></script>
+    <script src="./backend.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>
