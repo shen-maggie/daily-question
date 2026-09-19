@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f5f2eb" />
+    <meta name="theme-color" content="#fffaf2" />
     <meta
       name="description"
       content="A daily question you answer privately, reveal together, and discuss with friends."
@@ -27,6 +27,10 @@
           <span aria-hidden="true"></span>
           One question, everywhere
         </div>
+        <nav class="desktop-nav" aria-label="Primary navigation">
+          <a class="active" href="#today">Today</a>
+          <a href="#history">History</a>
+        </nav>
         <button class="group-switcher" type="button" aria-label="Switch group">
           <span class="group-avatars" aria-hidden="true">
             <span>SG</span><span>JK</span><span>AM</span>
@@ -37,7 +41,7 @@
       </header>
 
       <main>
-        <section class="today-layout" aria-labelledby="question-heading">
+        <section class="today-layout today-only" aria-labelledby="question-heading">
           <div class="question-column">
             <div class="daily-choice" aria-label="Choose today's path">
               <button class="choice-button active" type="button" data-mode="fun" aria-pressed="true">
@@ -46,7 +50,7 @@
               </button>
               <button class="choice-button" type="button" data-mode="reflective" aria-pressed="false">
                 <span class="choice-icon" aria-hidden="true">✦</span>
-                <span><strong>Reflective challenge</strong><small>A small moment for yourself</small></span>
+                <span><strong>Reflective question</strong><small>A little more thoughtful</small></span>
               </button>
             </div>
 
@@ -93,11 +97,11 @@
                 <legend>Who can see this answer?</legend>
                 <label>
                   <input type="radio" name="privacy" value="friends" checked />
-                  <span><strong>Friends only</strong><small>Your circles can reveal it after answering.</small></span>
+                  <span><strong>My circle</strong><small>Mutual reveal with this friend group.</small></span>
                 </label>
                 <label>
                   <input type="radio" name="privacy" value="public" />
-                  <span><strong>Public today</strong><small>Add it to the worldwide response wall.</small></span>
+                  <span><strong>Public today</strong><small>Add it to today's worldwide responses.</small></span>
                 </label>
                 <label>
                   <input type="radio" name="privacy" value="private" />
@@ -122,10 +126,24 @@
               </div>
             </div>
 
+            <div class="private-state" id="private-state" hidden>
+              <span class="private-icon" aria-hidden="true">✓</span>
+              <p class="eyebrow">Saved just for you</p>
+              <h2>Your streak is safe.</h2>
+              <p>This answer stays private, so circle responses remain hidden. You can still send the question itself to your group chat.</p>
+              <div class="private-answer">
+                <strong>Your answer</strong>
+                <p id="private-answer-text"></p>
+              </div>
+              <button class="share-chat-button" id="share-question-button" type="button">
+                Send question to group chat <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+
             <div class="revealed-state" id="revealed-state" hidden>
               <div class="panel-heading">
                 <div>
-                  <p class="eyebrow">The roommates · <span id="privacy-result">Friends only</span></p>
+                  <p class="eyebrow">The roommates · <span id="privacy-result">My circle</span></p>
                   <h2>Answers are in.</h2>
                 </div>
                 <button class="icon-button" id="share-button" type="button" aria-label="Share results" title="Share results">↗</button>
@@ -161,22 +179,82 @@
           </aside>
         </section>
 
-        <section class="how-it-works" aria-label="Daily rhythm">
+        <section class="how-it-works today-only" aria-label="Daily rhythm">
           <div class="section-intro">
             <p class="eyebrow">One shared moment</p>
             <h2>Pick what you need today. Either one keeps the ritual going.</h2>
-            <p>The world gets the same two choices each day. Your group can be silly together, slow down together, or split between both.</p>
+            <p>The world gets the same two questions each day. Your group can be silly together, think more deeply, or split between both.</p>
           </div>
           <div class="rhythm-steps">
-            <div><span>01 · CHOOSE</span><p>Answer the fun question or try the reflective challenge.</p></div>
+            <div><span>01 · CHOOSE</span><p>Answer the fun question or the reflective question.</p></div>
             <div><span>02 · REVEAL</span><p>Either choice keeps your streak and unlocks friends on that path.</p></div>
             <div><span>03 · TALK</span><p>A tailored follow-up carries the moment into your group chat.</p></div>
+          </div>
+        </section>
+
+        <section class="history-view" id="history-view" hidden aria-labelledby="history-heading">
+          <div class="history-header">
+            <div>
+              <p class="eyebrow">Your Sidequests</p>
+              <h1 id="history-heading">September 2026</h1>
+              <p>Pick a date to revisit what you chose, wrote, and shared.</p>
+            </div>
+            <div class="history-legend" aria-label="Calendar legend">
+              <span><i class="legend-dot fun-dot"></i>Fun</span>
+              <span><i class="legend-dot reflective-dot"></i>Reflective</span>
+              <span><i class="legend-dot both-dot"></i>Both</span>
+            </div>
+          </div>
+
+          <div class="history-layout">
+            <div class="calendar" aria-label="September 2026 calendar">
+              <div class="weekday">Sun</div><div class="weekday">Mon</div><div class="weekday">Tue</div><div class="weekday">Wed</div><div class="weekday">Thu</div><div class="weekday">Fri</div><div class="weekday">Sat</div>
+              <span class="calendar-empty"></span><span class="calendar-empty"></span>
+              <button class="calendar-day" type="button" data-date="2026-09-01">1</button>
+              <button class="calendar-day" type="button" data-date="2026-09-02">2</button>
+              <button class="calendar-day has-fun" type="button" data-date="2026-09-03">3</button>
+              <button class="calendar-day" type="button" data-date="2026-09-04">4</button>
+              <button class="calendar-day has-reflective" type="button" data-date="2026-09-05">5</button>
+              <button class="calendar-day has-fun" type="button" data-date="2026-09-06">6</button>
+              <button class="calendar-day has-fun" type="button" data-date="2026-09-07">7</button>
+              <button class="calendar-day has-both" type="button" data-date="2026-09-08">8</button>
+              <button class="calendar-day" type="button" data-date="2026-09-09">9</button>
+              <button class="calendar-day has-reflective" type="button" data-date="2026-09-10">10</button>
+              <button class="calendar-day has-fun" type="button" data-date="2026-09-11">11</button>
+              <button class="calendar-day has-fun" type="button" data-date="2026-09-12">12</button>
+              <button class="calendar-day has-reflective" type="button" data-date="2026-09-13">13</button>
+              <button class="calendar-day has-fun" type="button" data-date="2026-09-14">14</button>
+              <button class="calendar-day has-both" type="button" data-date="2026-09-15">15</button>
+              <button class="calendar-day has-reflective" type="button" data-date="2026-09-16">16</button>
+              <button class="calendar-day" type="button" data-date="2026-09-17">17</button>
+              <button class="calendar-day has-fun selected" type="button" data-date="2026-09-18">18</button>
+              <button class="calendar-day today" type="button" data-date="2026-09-19">19</button>
+              <button class="calendar-day future" type="button" disabled>20</button>
+              <button class="calendar-day future" type="button" disabled>21</button>
+              <button class="calendar-day future" type="button" disabled>22</button>
+              <button class="calendar-day future" type="button" disabled>23</button>
+              <button class="calendar-day future" type="button" disabled>24</button>
+              <button class="calendar-day future" type="button" disabled>25</button>
+              <button class="calendar-day future" type="button" disabled>26</button>
+              <button class="calendar-day future" type="button" disabled>27</button>
+              <button class="calendar-day future" type="button" disabled>28</button>
+              <button class="calendar-day future" type="button" disabled>29</button>
+              <button class="calendar-day future" type="button" disabled>30</button>
+            </div>
+
+            <aside class="history-detail" id="history-detail" aria-live="polite">
+              <p class="eyebrow" id="history-date">Friday, September 18</p>
+              <div class="history-badges" id="history-badges"><span class="history-badge fun">Fun question</span><span class="history-badge circle">My circle</span></div>
+              <h2 id="history-question">What tiny inconvenience would you permanently delete from the world?</h2>
+              <blockquote id="history-answer">“Fitted sheets. No object should be that smug and that hard to fold.”</blockquote>
+              <p class="history-shared" id="history-shared">Shared with The roommates · 3 replies</p>
+            </aside>
           </div>
         </section>
       </main>
 
       <nav class="mobile-nav" aria-label="Primary navigation">
-        <a class="active" href="#"><span aria-hidden="true">●</span>Today</a>
+        <a class="active" href="#today"><span aria-hidden="true">●</span>Today</a>
         <a href="#history"><span aria-hidden="true">◫</span>History</a>
         <button type="button"><span aria-hidden="true">+</span>Invite</button>
       </nav>

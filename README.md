@@ -5,13 +5,18 @@ in touch. The daily question is global; answers, reveals, and discussion prompts
 are private to each friend group. Discord and Messages bring the conversation
 back to the chat people already use.
 
-Each daily answer defaults to friends-only. A person can instead make that
-day's answer public on the worldwide response wall or keep it entirely private.
-The visibility choice resets for every new question.
+Each daily answer defaults to the person's private friend circle. A person can
+instead make that day's answer public on the worldwide response wall or keep it
+entirely private. The visibility choice resets for every new question.
 
 Every day offers two paths: a playful worldwide question and a small reflective
-challenge. Completing either one keeps the same daily streak; people can choose
-based on their mood or complete both.
+question. Completing either one keeps the same daily streak; people can choose
+based on their mood or answer both. History records the selected path, answer,
+and audience by calendar date.
+
+Sidequest does not replace a group chat. Circles handle mutual answer reveals;
+the native share action sends the daily prompt or conversation spark into an
+existing Messages or Discord chat.
 
 ## Current Prototype
 
