@@ -204,8 +204,25 @@ function openRitualSettings() {
     input.checked = Boolean(ritual);
     if (ritual) ritualForm.elements[`${input.value}Day`].value = String(ritual.day);
   });
-  document.querySelector("#ritual-form-error").hidden = true;
+  syncRitualOptions();
   ritualDialog.showModal();
+}
+
+function syncRitualOptions(changedInput) {
+  const toggles = [...ritualForm.querySelectorAll('input[name="ritual"]')];
+  const selected = toggles.filter((input) => input.checked);
+  if (selected.length > 2 && changedInput) changedInput.checked = false;
+  const activeCount = toggles.filter((input) => input.checked).length;
+  document.querySelector("#ritual-selection-count").textContent = `${activeCount} of 2 selected`;
+
+  toggles.forEach((input) => {
+    const option = input.closest(".ritual-option");
+    const enabled = input.checked;
+    option.classList.toggle("enabled", enabled);
+    option.querySelector(".day-picker").disabled = !enabled;
+    option.querySelector(".switch b").textContent = enabled ? "On" : "Off";
+    input.disabled = !enabled && activeCount >= 2;
+  });
 }
 
 let customCircles;
@@ -250,21 +267,24 @@ function hasCompletedToday() {
 function renderStreaks() {
   const completed = hasCompletedToday();
   const groupAnswers = completed ? 3 : 2;
+  const groupTotal = 4;
+  const threshold = Math.ceil(groupTotal * 0.5);
+  const streakSecured = groupAnswers >= threshold;
 
   personalStreakStatus.textContent = completed
     ? "Kept for today. One answer was enough."
     : "Answer either question to keep it going.";
   personalStreakMeter.style.width = completed ? "100%" : "72%";
 
-  groupStreakStatus.textContent = completed
-    ? "3 of 4 answered either question today."
-    : "2 of 4 answered either question today.";
-  groupStreakMeter.style.width = `${groupAnswers * 25}%`;
-  circleStreakCopy.textContent = completed
-    ? "3 of 4 people have answered today. Waiting on Maya."
-    : "2 of 4 people have answered today. Either daily question counts.";
-  circleStreakCount.textContent = `${groupAnswers} / 4`;
-  circleStreakMeter.style.width = `${groupAnswers * 25}%`;
+  groupStreakStatus.textContent = streakSecured
+    ? `Streak secured · ${groupAnswers} of ${groupTotal} answered today.`
+    : `${groupAnswers} of ${threshold} needed to secure the streak.`;
+  groupStreakMeter.style.width = `${(groupAnswers / groupTotal) * 100}%`;
+  circleStreakCopy.textContent = streakSecured
+    ? "Half the circle answered, so today's streak is safe. Either question counts."
+    : `${threshold - groupAnswers} more answer needed to keep the circle streak.`;
+  circleStreakCount.textContent = `${groupAnswers} / ${groupTotal} · 50% needed`;
+  circleStreakMeter.style.width = `${(groupAnswers / groupTotal) * 100}%`;
 }
 
 function setFormLocked(locked) {
@@ -581,13 +601,13 @@ document.querySelector("#ritual-settings-button").addEventListener("click", open
 document.querySelector("#edit-rituals-button").addEventListener("click", openRitualSettings);
 document.querySelector("#close-ritual-dialog").addEventListener("click", () => ritualDialog.close());
 
+ritualForm.querySelectorAll('input[name="ritual"]').forEach((input) => {
+  input.addEventListener("change", () => syncRitualOptions(input));
+});
+
 ritualForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const selected = [...ritualForm.querySelectorAll('input[name="ritual"]:checked')];
-  if (selected.length > 2) {
-    document.querySelector("#ritual-form-error").hidden = false;
-    return;
-  }
   circleRituals[activeCircleId] = selected.map((input) => ({
     type: input.value,
     day: Number(ritualForm.elements[`${input.value}Day`].value),

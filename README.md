@@ -15,9 +15,9 @@ based on their mood or answer both. History records the selected path, answer,
 and audience by calendar date.
 
 Streaks work at two levels. A personal streak continues after answering either
-daily question. A circle streak continues when every member has answered at
-least one of the two questions that day, even when the group splits between the
-fun and reflective prompts.
+daily question. A circle streak continues once at least half of the members
+have answered one of the two questions that day, even when the group splits
+between the fun and reflective prompts.
 
 Circles can also subscribe to up to two optional weekly rituals: Most Likely
 To, Would You Rather, or Sunday Reflection. Each ritual can be assigned to a

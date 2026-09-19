@@ -91,8 +91,8 @@
                   <span class="streak-kicker">The roommates</span>
                   <strong>6 days</strong>
                 </div>
-                <p id="group-streak-status">2 of 4 answered either question today.</p>
-                <div class="streak-meter" aria-hidden="true"><span id="group-streak-meter"></span></div>
+                <p id="group-streak-status">Streak secured · 2 of 4 answered today.</p>
+                <div class="streak-meter threshold-meter" aria-hidden="true"><span id="group-streak-meter"></span></div>
               </article>
             </div>
 
@@ -325,13 +325,13 @@
 
             <section class="circle-streak-panel" aria-labelledby="circle-streak-heading">
               <div>
-                <p class="eyebrow">Circle streak</p>
+                <p class="eyebrow">Circle streak <span class="streak-safe">Secured today</span></p>
                 <h3 id="circle-streak-heading"><span id="circle-streak-days">6</span> days together</h3>
-                <p id="circle-streak-copy">2 of 4 people have answered today. Either daily question counts.</p>
+                <p id="circle-streak-copy">Half the circle answered, so today's streak is safe. Either question counts.</p>
               </div>
               <div class="circle-streak-progress">
-                <span id="circle-streak-count">2 / 4</span>
-                <div class="streak-meter" aria-hidden="true"><span id="circle-streak-meter"></span></div>
+                <span id="circle-streak-count">2 / 4 · 50% needed</span>
+                <div class="streak-meter threshold-meter" aria-hidden="true"><span id="circle-streak-meter"></span></div>
               </div>
             </section>
 
@@ -424,33 +424,24 @@
       <dialog class="circle-dialog ritual-dialog" id="ritual-dialog">
         <form method="dialog" id="ritual-form">
           <div class="dialog-heading">
-            <div><p class="eyebrow">Circle settings</p><h2>Weekly rituals</h2><p>Choose up to two. These are optional and do not affect personal streaks.</p></div>
+            <div><p class="eyebrow">The roommates</p><h2>Circle rituals</h2><p>Add a little variety to the week. Rituals are optional and never affect personal streaks.</p></div>
             <button class="icon-button dark" id="close-ritual-dialog" type="button" aria-label="Close ritual settings">×</button>
           </div>
+          <div class="ritual-limit"><span>Weekly schedule</span><strong id="ritual-selection-count">2 of 2 selected</strong></div>
           <div class="ritual-options">
-            <label class="ritual-option">
-              <input type="checkbox" name="ritual" value="likely" checked />
-              <span class="ritual-copy"><strong>Most Likely To</strong><small>Vote for someone, then reveal together.</small></span>
-              <select name="likelyDay" aria-label="Most Likely To day">
-                <option value="3" selected>Wednesday</option><option value="5">Friday</option><option value="0">Sunday</option>
-              </select>
-            </label>
-            <label class="ritual-option">
-              <input type="checkbox" name="ritual" value="rather" />
-              <span class="ritual-copy"><strong>Would You Rather</strong><small>Pick a side and defend it in the room.</small></span>
-              <select name="ratherDay" aria-label="Would You Rather day">
-                <option value="3">Wednesday</option><option value="5" selected>Friday</option><option value="0">Sunday</option>
-              </select>
-            </label>
-            <label class="ritual-option">
-              <input type="checkbox" name="ritual" value="reflection" checked />
-              <span class="ritual-copy"><strong>Sunday Reflection</strong><small>A slower prompt for ending the week together.</small></span>
-              <select name="reflectionDay" aria-label="Sunday Reflection day">
-                <option value="3">Wednesday</option><option value="5">Friday</option><option value="0" selected>Sunday</option>
-              </select>
-            </label>
+            <article class="ritual-option" data-ritual-option="likely">
+              <div class="ritual-option-heading"><span class="ritual-copy"><strong>Most Likely To</strong><small>Vote for someone, then reveal together.</small></span><label class="switch"><input type="checkbox" name="ritual" value="likely" checked /><span aria-hidden="true"></span><b>On</b></label></div>
+              <fieldset class="day-picker"><legend>Runs on</legend><label><input type="radio" name="likelyDay" value="3" checked /><span>Wed</span></label><label><input type="radio" name="likelyDay" value="5" /><span>Fri</span></label><label><input type="radio" name="likelyDay" value="0" /><span>Sun</span></label></fieldset>
+            </article>
+            <article class="ritual-option" data-ritual-option="rather">
+              <div class="ritual-option-heading"><span class="ritual-copy"><strong>Would You Rather</strong><small>Pick a side and defend it in the room.</small></span><label class="switch"><input type="checkbox" name="ritual" value="rather" /><span aria-hidden="true"></span><b>Off</b></label></div>
+              <fieldset class="day-picker" disabled><legend>Runs on</legend><label><input type="radio" name="ratherDay" value="3" /><span>Wed</span></label><label><input type="radio" name="ratherDay" value="5" checked /><span>Fri</span></label><label><input type="radio" name="ratherDay" value="0" /><span>Sun</span></label></fieldset>
+            </article>
+            <article class="ritual-option" data-ritual-option="reflection">
+              <div class="ritual-option-heading"><span class="ritual-copy"><strong>Sunday Reflection</strong><small>A slower prompt for ending the week together.</small></span><label class="switch"><input type="checkbox" name="ritual" value="reflection" checked /><span aria-hidden="true"></span><b>On</b></label></div>
+              <fieldset class="day-picker"><legend>Runs on</legend><label><input type="radio" name="reflectionDay" value="3" /><span>Wed</span></label><label><input type="radio" name="reflectionDay" value="5" /><span>Fri</span></label><label><input type="radio" name="reflectionDay" value="0" checked /><span>Sun</span></label></fieldset>
+            </article>
           </div>
-          <p class="form-error" id="ritual-form-error" hidden>Choose no more than two rituals.</p>
           <button class="primary-button dialog-submit" value="default" type="submit">Save circle rituals</button>
         </form>
       </dialog>

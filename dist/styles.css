@@ -268,6 +268,8 @@ h1 {
 .streak-card p { min-height: 34px; margin: 8px 0 12px; color: #5f6863; font-size: 0.78rem; line-height: 1.35; }
 .streak-meter { height: 7px; overflow: hidden; border: 1px solid var(--ink); border-radius: 2px; background: rgba(255, 255, 255, 0.65); }
 .streak-meter span { display: block; width: 50%; height: 100%; background: var(--berry); transition: width 220ms ease; }
+.threshold-meter { position: relative; }
+.threshold-meter::after { content: ""; position: absolute; top: -2px; bottom: -2px; left: 50%; width: 2px; background: var(--ink); }
 .personal-streak .streak-meter span { background: var(--green); }
 
 .answer-form {
@@ -640,6 +642,7 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   background: #fff3d7;
 }
 .circle-streak-panel .eyebrow { margin: 0 0 4px; color: var(--berry); }
+.streak-safe { margin-left: 6px; padding: 3px 6px; border-radius: 3px; background: var(--green); color: var(--ink); font-size: 0.64rem; }
 .circle-streak-panel h3 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 1.55rem; font-weight: 600; }
 .circle-streak-panel p:last-child { margin: 5px 0 0; color: #5f6863; font-size: 0.82rem; line-height: 1.4; }
 .circle-streak-progress { display: grid; gap: 8px; }
@@ -714,13 +717,32 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
 .dialog-submit { width: 100%; }
 .ritual-dialog { width: min(670px, calc(100% - 28px)); }
 .dialog-heading > div > p:last-child { max-width: 470px; margin: -14px 0 24px; color: #5f6863; line-height: 1.45; }
-.ritual-options { display: grid; border-top: 1px solid var(--ink); }
-.ritual-option { min-height: 84px; padding: 14px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: auto 1fr 130px; gap: 12px; align-items: center; cursor: pointer; }
-.ritual-option > input { width: 18px; height: 18px; accent-color: var(--berry); }
+.ritual-limit { padding: 10px 0; border-top: 1px solid var(--ink); display: flex; justify-content: space-between; gap: 16px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; }
+.ritual-limit strong { color: var(--berry); }
+.ritual-options { display: grid; gap: 9px; margin-bottom: 20px; }
+.ritual-option { padding: 15px; border: 1px solid var(--line); border-radius: 7px; background: rgba(255, 255, 255, 0.45); }
+.ritual-option.enabled { border-color: var(--ink); background: #fff3d7; }
+.ritual-option-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .ritual-copy strong,
 .ritual-copy small { display: block; }
 .ritual-copy small { margin-top: 4px; color: #69716d; line-height: 1.35; }
-.ritual-option select { min-height: 38px; padding: 0 8px; border: 1px solid var(--ink); border-radius: 5px; background: white; }
+.switch { display: grid; grid-template-columns: 38px 24px; gap: 7px; align-items: center; cursor: pointer; }
+.switch input { position: absolute; opacity: 0; pointer-events: none; }
+.switch span { width: 38px; height: 22px; padding: 2px; border: 1px solid var(--ink); border-radius: 999px; background: #d9d8d1; }
+.switch span::after { content: ""; display: block; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); transition: transform 150ms ease; }
+.switch input:checked + span { background: var(--green); }
+.switch input:checked + span::after { transform: translateX(16px); }
+.switch input:focus-visible + span { outline: 3px solid var(--blue); outline-offset: 2px; }
+.switch input:disabled + span { opacity: 0.35; cursor: not-allowed; }
+.switch b { font-size: 0.72rem; }
+.day-picker { margin: 14px 0 0; padding: 0; border: 0; display: flex; align-items: center; gap: 5px; }
+.day-picker legend { float: left; margin-right: 7px; font-size: 0.68rem; font-weight: 900; text-transform: uppercase; line-height: 32px; }
+.day-picker label { cursor: pointer; }
+.day-picker input { position: absolute; opacity: 0; pointer-events: none; }
+.day-picker span { min-width: 48px; height: 32px; padding: 0 9px; border: 1px solid var(--line); border-radius: 4px; display: grid; place-items: center; background: white; font-size: 0.72rem; font-weight: 850; }
+.day-picker input:checked + span { border-color: var(--ink); background: var(--ink); color: white; }
+.day-picker input:focus-visible + span { outline: 3px solid var(--blue); outline-offset: 2px; }
+.day-picker:disabled { display: none; }
 
 .toast {
   position: fixed;
@@ -828,8 +850,9 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   .friend-row { grid-template-columns: 44px 1fr auto; }
   .friend-status { display: none; }
   .friend-picker { grid-template-columns: 1fr; }
-  .ritual-option { grid-template-columns: auto 1fr; }
-  .ritual-option select { grid-column: 2; width: 100%; }
+  .ritual-option-heading { align-items: flex-start; }
+  .day-picker { flex-wrap: wrap; }
+  .day-picker legend { width: 100%; line-height: 1; margin-bottom: 3px; }
   .circle-dialog form { padding: 20px; }
 }
 
