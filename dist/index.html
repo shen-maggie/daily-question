@@ -338,7 +338,11 @@
             <div class="room-question-strip">
               <span class="history-badge fun">Fun question</span>
               <p id="circle-room-question">If today had a movie title, what would it be?</p>
-              <a href="#today">View answers</a>
+              <button class="view-answers-button" id="view-circle-answers" type="button">View answers</button>
+            </div>
+            <div class="answer-gate" id="answer-gate" hidden role="status">
+              <div><strong>Your answer comes first.</strong><p>Submit your own response before seeing what the circle said.</p></div>
+              <a href="#today">Answer today's question</a>
             </div>
 
             <section class="next-ritual" id="next-ritual" aria-labelledby="next-ritual-heading">
@@ -347,25 +351,33 @@
                 <strong id="next-ritual-date">23</strong>
               </div>
               <div>
-                <p class="eyebrow">Next circle ritual</p>
+                <p class="eyebrow">Coming up in your circle</p>
                 <h3 id="next-ritual-heading">Most Likely To</h3>
                 <p id="next-ritual-preview">Who is most likely to accidentally become internet famous?</p>
               </div>
               <button class="text-button" id="edit-rituals-button" type="button">Edit schedule</button>
             </section>
 
-            <div class="room-messages circle-page-messages" data-room-messages="active"></div>
+            <section class="circle-conversation" aria-labelledby="circle-chat-heading">
+              <header class="conversation-header">
+                <div><p class="eyebrow">Circle chat</p><h3 id="circle-chat-heading">Today’s conversation</h3></div>
+                <span class="presence"><i aria-hidden="true"></i> 3 active now</span>
+              </header>
+              <div class="chat-day"><span>Today</span></div>
+              <div class="room-messages circle-page-messages" data-room-messages="active"></div>
 
-            <div class="suggested-followup">
-              <span aria-hidden="true">✦</span>
-              <p><strong>Keep it going</strong><br /><span id="circle-followup">Which title deserves an actual poster?</span></p>
-            </div>
+              <div class="suggested-followup">
+                <span aria-hidden="true">✦</span>
+                <p><strong>Conversation spark</strong><br /><span id="circle-followup">Which title deserves an actual poster?</span></p>
+              </div>
 
-            <form class="message-form circle-message-form" data-message-form="active">
-              <label class="sr-only" for="circle-message">Message this circle</label>
-              <input id="circle-message" name="message" maxlength="240" placeholder="Message The roommates..." required />
-              <button type="submit" aria-label="Send message" title="Send message">↑</button>
-            </form>
+              <form class="message-form circle-message-form" data-message-form="active">
+                <label class="sr-only" for="circle-message">Message this circle</label>
+                <input id="circle-message" name="message" maxlength="240" placeholder="Message The roommates..." required />
+                <button type="submit" aria-label="Send message" title="Send message">↑</button>
+                <small>Press Enter to send · Everyone in this circle can reply</small>
+              </form>
+            </section>
           </div>
         </section>
 

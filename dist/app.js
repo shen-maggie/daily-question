@@ -47,6 +47,8 @@ const nextRitualDay = document.querySelector("#next-ritual-day");
 const nextRitualDate = document.querySelector("#next-ritual-date");
 const nextRitualHeading = document.querySelector("#next-ritual-heading");
 const nextRitualPreview = document.querySelector("#next-ritual-preview");
+const viewCircleAnswers = document.querySelector("#view-circle-answers");
+const answerGate = document.querySelector("#answer-gate");
 
 const privacyLabels = {
   friends: "My circle",
@@ -147,9 +149,9 @@ const historyRecords = {
 };
 
 const seededMessages = [
-  { author: "Jamie", initial: "J", color: "face-yellow", text: "Alex, yours sounds like a horror movie set in our kitchen." },
-  { author: "Alex", initial: "A", color: "face-blue", text: "It was. Someone used the last mug and left it in their room." },
-  { author: "Maya", initial: "M", color: "face-pink", text: "My title is Four People, One Functioning Charger." },
+  { author: "Jamie", initial: "J", color: "face-yellow", text: "Alex, yours sounds like a horror movie set in our kitchen.", time: "8:41 PM", reactions: 2 },
+  { author: "Alex", initial: "A", color: "face-blue", text: "It was. Someone used the last mug and left it in their room.", time: "8:43 PM", reactions: 1 },
+  { author: "Maya", initial: "M", color: "face-pink", text: "My title is Four People, One Functioning Charger.", time: "8:46 PM", reactions: 3 },
 ];
 
 let circleMessages;
@@ -394,9 +396,25 @@ function makeMessage(message) {
   bubble.className = "message-bubble";
   const author = document.createElement("strong");
   author.textContent = message.author;
+  const time = document.createElement("time");
+  time.textContent = message.time || "Now";
   const text = document.createElement("p");
   text.textContent = message.text;
-  bubble.append(author, text);
+  const meta = document.createElement("div");
+  meta.className = "message-meta";
+  meta.append(author, time);
+  const reaction = document.createElement("button");
+  reaction.className = "message-reaction";
+  reaction.type = "button";
+  reaction.setAttribute("aria-label", `React to ${message.author}'s message`);
+  reaction.innerHTML = `♡ <span>${message.reactions || 0}</span>`;
+  reaction.addEventListener("click", () => {
+    const active = reaction.classList.toggle("active");
+    const count = reaction.querySelector("span");
+    count.textContent = String(Number(count.textContent) + (active ? 1 : -1));
+    reaction.firstChild.textContent = active ? "♥ " : "♡ ";
+  });
+  bubble.append(meta, text, reaction);
   item.append(avatar, bubble);
   return item;
 }
@@ -418,7 +436,7 @@ function renderMessages() {
 
 function postMessage(text, circleId) {
   if (!circleMessages[circleId]) circleMessages[circleId] = [];
-  circleMessages[circleId].push({ author: "You", initial: "You", color: "face-green", text });
+  circleMessages[circleId].push({ author: "You", initial: "You", color: "face-green", text, time: "Now", reactions: 0 });
   localStorage.setItem("sidequest-circle-messages", JSON.stringify(circleMessages));
   renderMessages();
   showToast(`Message sent to ${circleId === "roommates" ? "The roommates" : roomName.textContent}`);
@@ -600,6 +618,17 @@ document.querySelector("#close-circle-dialog").addEventListener("click", () => c
 document.querySelector("#ritual-settings-button").addEventListener("click", openRitualSettings);
 document.querySelector("#edit-rituals-button").addEventListener("click", openRitualSettings);
 document.querySelector("#close-ritual-dialog").addEventListener("click", () => ritualDialog.close());
+
+viewCircleAnswers.addEventListener("click", () => {
+  if (getSaved(activeMode).answer) {
+    answerGate.hidden = true;
+    window.location.hash = "#today";
+    return;
+  }
+  answerGate.hidden = false;
+  showToast("Submit your own answer first to unlock the circle");
+  answerGate.scrollIntoView({ behavior: "smooth", block: "center" });
+});
 
 ritualForm.querySelectorAll('input[name="ritual"]').forEach((input) => {
   input.addEventListener("change", () => syncRitualOptions(input));

@@ -32,6 +32,9 @@ existing Messages or Discord chat as a reminder.
 The current prototype includes working Today, Circles, History, and Friends
 views. Local demo state supports creating circles, choosing members, adding
 friends, posting circle messages, reacting, and revisiting past responses.
+Circle answers remain locked until a person submits their own response. The
+current chat is a local prototype; shared accounts and real-time delivery are
+the next backend step.
 
 ## Current Prototype
 
