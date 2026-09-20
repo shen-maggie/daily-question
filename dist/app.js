@@ -474,7 +474,7 @@ function renderHistory(date) {
     heading.textContent = date === "2026-09-19" ? "Nothing chosen yet today." : "A quiet day.";
     const message = document.createElement("p");
     message.className = "history-empty";
-    message.textContent = date === "2026-09-19" ? "Choose either question to keep your streak going." : "You did not answer a SparKIT question on this date.";
+    message.textContent = date === "2026-09-19" ? "Choose either question to keep your streak going." : "You did not answer a sparKIT question on this date.";
     fragment.append(heading, message);
   } else {
     records.forEach((record, index) => {

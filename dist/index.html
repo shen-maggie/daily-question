@@ -14,14 +14,14 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231c1c1a'/%3E%3Cpath d='M18 18h28v20H31l-9 8v-8h-4z' fill='%23f3ff73'/%3E%3C/svg%3E"
     />
     <link rel="stylesheet" href="./styles.css" />
-    <title>SparKIT - Today's question</title>
+    <title>sparKIT - Today's question</title>
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar">
-        <a class="brand" href="#" aria-label="SparKIT home">
+        <a class="brand" href="#" aria-label="sparKIT home">
           <span class="brand-mark" aria-hidden="true">K</span>
-          <span>SparKIT</span>
+          <span>sparKIT</span>
         </a>
         <div class="world-pulse" aria-label="Worldwide daily question">
           <span aria-hidden="true"></span>
@@ -132,15 +132,20 @@
           <aside class="reveal-panel" id="reveal-panel" aria-live="polite">
             <div class="locked-state" id="locked-state">
               <svg class="journal-illustration" viewBox="0 0 420 250" role="img" aria-label="A cat writing an answer in a notebook">
-                <path class="illustration-wash" d="M44 201c18-38 57-59 98-52 28-53 115-66 165-23 37 31 41 76 10 97H73c-27 0-41-8-29-22Z" />
                 <path class="illustration-line" d="M53 218h314" />
 
                 <path class="illustration-line" d="M116 176c-35-4-45 23-25 34 18 10 42-4 34-20-5-10-21-9-26-1" />
                 <path class="illustration-fill-pink" d="M132 128c21-22 67-20 87 7 13 18 14 51 4 76h-105c-7-31-3-64 14-83Z" />
                 <path class="illustration-fill-yellow" d="m126 65 25 15c11-7 29-7 41 0l26-15-6 38c5 30-14 51-41 51s-47-21-42-51z" />
                 <path class="illustration-line" d="m126 65 25 15c11-7 29-7 41 0l26-15-6 38c5 30-14 51-41 51s-47-21-42-51z" />
-                <path class="illustration-line" d="M146 104c3-3 7-3 10 0M187 104c3-3 7-3 10 0M168 114l5 4-5 4M168 122c-6 6-13 5-17 1M173 122c6 6 13 5 17 1M136 113l-31-5M136 122l-32 5M206 113l30-5M205 122l32 5" />
+                <path class="illustration-detail-pink" d="m132 75 17 11-20 10zM211 75l-17 11 19 10z" />
+                <path class="illustration-line" d="M144 101c4-5 11-5 15 0M184 101c4-5 11-5 15 0M168 114l5 4-5 4M168 122c-6 6-13 5-17 1M173 122c6 6 13 5 17 1M136 113l-31-5M136 122l-32 5M206 113l30-5M205 122l32 5M158 82l4 9M171 79v11M185 82l-4 9" />
+                <circle class="illustration-ink" cx="151" cy="103" r="3" />
+                <circle class="illustration-ink" cx="192" cy="103" r="3" />
+                <circle class="illustration-detail-pink" cx="145" cy="116" r="4" />
+                <circle class="illustration-detail-pink" cx="198" cy="116" r="4" />
                 <path class="illustration-line" d="M147 143c-15 9-22 26-18 43M201 142c16 7 24 23 22 41" />
+                <path class="illustration-line" d="M150 143c13 8 29 9 43 0M158 147l3 10M184 147l-3 10" />
 
                 <path class="illustration-fill-paper" d="m105 172 65-10 7 47-67 8z" />
                 <path class="illustration-fill-paper" d="m170 162 67 10-5 45-55-8z" />
@@ -220,7 +225,7 @@
         <section class="history-view" id="history-view" hidden aria-labelledby="history-heading">
           <div class="history-header">
             <div>
-              <p class="eyebrow">Your SparKIT history</p>
+              <p class="eyebrow">Your sparKIT history</p>
               <h1 id="history-heading">September 2026</h1>
               <p>Pick a date to revisit what you chose, wrote, and shared.</p>
             </div>
@@ -312,7 +317,6 @@
             <section class="circle-conversation" aria-labelledby="circle-chat-heading">
               <header class="conversation-header">
                 <div><p class="eyebrow">Circle chat</p><h3 id="circle-chat-heading">Today’s conversation</h3></div>
-                <span class="presence"><i aria-hidden="true"></i> 3 active now</span>
               </header>
               <div class="chat-day"><span>Today</span></div>
               <div class="room-messages circle-page-messages" data-room-messages="active"></div>
@@ -339,7 +343,7 @@
           </header>
 
           <form class="friend-search" id="friend-search-form" hidden>
-            <label for="friend-username">SparKIT username</label>
+            <label for="friend-username">sparKIT username</label>
             <div><input id="friend-username" name="username" placeholder="@username" disabled /><button type="submit" disabled>Send request</button></div>
             <small class="friend-setup-note">Username requests will turn on when shared accounts are connected.</small>
           </form>
