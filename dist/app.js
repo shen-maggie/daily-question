@@ -12,6 +12,7 @@ const privacyResult = document.querySelector("#privacy-result");
 const questionHeading = document.querySelector("#question-heading");
 const dailyLabel = document.querySelector("#daily-label");
 const worldNote = document.querySelector("#world-note");
+const dailyDate = document.querySelector("#daily-date");
 const personalStreakStatus = document.querySelector("#personal-streak-status");
 const personalStreakMeter = document.querySelector("#personal-streak-meter");
 const groupStreakStatus = document.querySelector("#group-streak-status");
@@ -51,24 +52,80 @@ const privacyClasses = {
   private: "private",
 };
 
+const reflectiveQuestions = [
+  { question: "If you met yourself from five years ago, what would you tell them?", followUp: "What would your younger self be proud to see?" },
+  { question: "Would you rather be good and misunderstood, or admired for someone you are not?", followUp: "How much should other people's perception matter?" },
+  { question: "What is a regret that still teaches you something?", followUp: "Would you make the same choice with what you knew then?" },
+  { question: "Would you rather be a jack of many trades or the master of one?", followUp: "Which path feels more like the life you want?" },
+  { question: "What has been on your mind recently?", followUp: "Is there a way your friends could help carry it?" },
+  { question: "Do you think you are a good person?", followUp: "What action makes you believe that most?" },
+  { question: "What is your greatest strength?", followUp: "When did that strength last help someone else?" },
+  { question: "In a room of 100 people, what could you do that nobody else could?", followUp: "How did you get unexpectedly good at it?" },
+  { question: "What was the biggest turning point in your life?", followUp: "Did you recognize it as a turning point at the time?" },
+  { question: "What do you see yourself doing during retirement?", followUp: "What part of that life could you begin now?" },
+  { question: "Are you comfortable with who you are as a person?", followUp: "What part of yourself took the longest to accept?" },
+  { question: "What quote best represents your view on life?", followUp: "Has that view changed over time?" },
+  { question: "Who has had the biggest impact on who you are?", followUp: "What part of them do you carry with you?" },
+  { question: "What would you do with one extra hour every day?", followUp: "What currently keeps you from making time for it?" },
+  { question: "What are you most proud of becoming better at?", followUp: "Who noticed the change before you did?" },
+];
+
+const funQuestions = [
+  { question: "Would you rather be a beef cow or a dairy cow?", followUp: "Defend your choice like your life depends on it." },
+  { question: "Would you rather be a human with strawberry thoughts or a strawberry with human thoughts?", followUp: "What is the strawberry thinking about?" },
+  { question: "Would you rather visit 50 years in the past or 50 years in the future?", followUp: "What is the first thing you would investigate?" },
+  { question: "What unpopular book, movie, or show did you secretly love?", followUp: "Give the group your best defense of it." },
+  { question: "What is your most vivid very-early childhood memory?", followUp: "How sure are you that the memory is real?" },
+  { question: "Which cat are you today?", followUp: "Describe the cat's pose, mood, and exact location." },
+  { question: "A trolley is headed toward five strangers. Would you redirect it if it permanently deleted your camera roll?", followUp: "What changes if the camera roll belongs to someone else?" },
+  { question: "What is your go-to midnight snack?", followUp: "What drink completes the combination?" },
+  { question: "If you could wake up anywhere you have never been, where would it be?", followUp: "Who from this group are you bringing?" },
+  { question: "What was your favorite plushie as a kid?", followUp: "What was its name and personality?" },
+  { question: "Give up your favorite food for a month, or eat only that food for a month?", followUp: "How many days before you regret your choice?" },
+  { question: "Would you rather learn a new language or master a new skill?", followUp: "Which language or skill are you choosing?" },
+  { question: "What are you genuinely in the top 1% at?", followUp: "What would the competition look like?" },
+  { question: "Would you rather sneeze glitter or hiccup bubbles?", followUp: "Which one becomes more annoying after a week?" },
+];
+
+const today = new Date();
+const todayKey = [today.getFullYear(), String(today.getMonth() + 1).padStart(2, "0"), String(today.getDate()).padStart(2, "0")].join("-");
+const dayIndex = Math.floor(Date.UTC(today.getFullYear(), today.getMonth(), today.getDate()) / 86400000);
+const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+
+function questionForToday(bank, mode) {
+  if (mode === "reflective" && today.getDate() === 1) {
+    return { question: "What are your goals for this month?", followUp: "Which one would feel most meaningful to finish?" };
+  }
+  if (mode === "reflective" && today.getDate() === lastDayOfMonth) {
+    return { question: "What are you most proud of this month?", followUp: "What do you want to carry into next month?" };
+  }
+  if (mode === "fun" && today.getMonth() === 11 && today.getDate() >= 20 && today.getDate() <= 25) {
+    return { question: "What is the best Christmas movie?", followUp: "Which movie is absolutely not a Christmas movie?" };
+  }
+  return bank[((dayIndex % bank.length) + bank.length) % bank.length];
+}
+
+const reflectiveToday = questionForToday(reflectiveQuestions, "reflective");
+const funToday = questionForToday(funQuestions, "fun");
+
 const dailyModes = {
   fun: {
     shortLabel: "Fun question",
     label: "Today's worldwide fun question",
-    question: "If today had a movie title, what would it be?",
-    note: "People everywhere get the same question. Pick whatever makes you laugh first.",
+    question: funToday.question,
+    note: "A playful prompt everyone gets today. Go with your first instinct.",
     answerLabel: "Your answer",
     placeholder: "The more specific, the better...",
-    followUp: "Which title deserves an actual poster?",
+    followUp: funToday.followUp,
   },
   reflective: {
     shortLabel: "Reflective question",
     label: "Today's worldwide reflective question",
-    question: "What is something small that has made life feel lighter lately?",
-    note: "A quieter question for noticing what is already helping, even a little.",
+    question: reflectiveToday.question,
+    note: "Take a moment with it. A specific, honest answer is enough.",
     answerLabel: "Your reflection",
     placeholder: "A person, a habit, a place, a tiny moment...",
-    followUp: "Is there one small thing we could make easier for each other this week?",
+    followUp: reflectiveToday.followUp,
   },
 };
 
@@ -131,7 +188,7 @@ try {
 let activeMode = "reflective";
 
 function storageKey(type, mode = activeMode) {
-  return `sidequest-${type}-001-${mode}`;
+  return `sidequest-${type}-${todayKey}-${mode}`;
 }
 
 function getSaved(mode = activeMode) {
@@ -227,6 +284,7 @@ function renderMode(mode) {
   activeMode = mode;
   const content = dailyModes[mode];
   const saved = getSaved(mode);
+  dailyDate.textContent = today.toLocaleDateString("en-US", { month: "long", day: "numeric" });
 
   modeButtons.forEach((button) => {
     const selected = button.dataset.mode === mode;

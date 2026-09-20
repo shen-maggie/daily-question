@@ -256,13 +256,14 @@ h1 {
 .face.muted { filter: grayscale(1); opacity: 0.35; }
 .streak-board {
   width: min(100%, 700px);
-  margin: 20px 0 30px;
+  margin: 0 0 30px;
   display: grid;
   grid-template-columns: 1fr 1fr;
   border: 1px solid var(--ink);
   border-radius: 7px;
   overflow: hidden;
 }
+#today-circle-status[hidden] + .streak-board { margin-top: 34px; }
 .streak-board:has(.circle-streak[hidden]) { grid-template-columns: minmax(0, 1fr); }
 .streak-card { min-width: 0; padding: 15px 16px 14px; background: rgba(255, 255, 255, 0.45); }
 .streak-card + .streak-card { border-left: 1px solid var(--ink); }
@@ -378,6 +379,7 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
 .illustration-fill-pink { fill: var(--pink); stroke: var(--ink); stroke-width: 3; }
 .illustration-fill-yellow { fill: var(--acid); stroke: var(--ink); stroke-width: 3; }
 .illustration-fill-green { fill: var(--green); stroke: var(--ink); stroke-width: 3; }
+.illustration-fill-blue { fill: var(--blue); stroke: var(--ink); stroke-width: 3; }
 .illustration-fill-paper { fill: var(--paper); stroke: var(--ink); stroke-width: 3; }
 .eyebrow {
   margin: 14px 0 8px;
@@ -818,7 +820,7 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   h1 { font-size: clamp(2.55rem, 12.5vw, 4.5rem); margin-top: 8px; }
   .question-meta { margin-bottom: 20px; }
   .status-row { margin: 28px 0; gap: 12px; }
-  .streak-board { grid-template-columns: 1fr; margin-top: 12px; }
+  .streak-board { grid-template-columns: 1fr; }
   .streak-card + .streak-card { border-left: 0; border-top: 1px solid var(--ink); }
   textarea { min-height: 108px; }
   .form-footer { align-items: flex-end; }
