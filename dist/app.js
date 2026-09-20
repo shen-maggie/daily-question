@@ -21,7 +21,7 @@ const circleStreakCount = document.querySelector("#circle-streak-count");
 const circleStreakMeter = document.querySelector("#circle-streak-meter");
 const conversationPrompt = document.querySelector("#conversation-prompt");
 const modeButtons = document.querySelectorAll(".choice-button");
-const revealPanel = document.querySelector("#reveal-panel");
+const questionColumn = document.querySelector(".question-column");
 const toast = document.querySelector("#toast");
 const todaySections = document.querySelectorAll(".today-only");
 const historyView = document.querySelector("#history-view");
@@ -234,8 +234,8 @@ function renderMode(mode) {
     button.setAttribute("aria-pressed", String(selected));
   });
 
-  revealPanel.classList.toggle("mode-fun", mode === "fun");
-  revealPanel.classList.toggle("mode-reflective", mode === "reflective");
+  questionColumn.classList.toggle("mode-fun", mode === "fun");
+  questionColumn.classList.toggle("mode-reflective", mode === "reflective");
 
   dailyLabel.textContent = content.label;
   questionHeading.textContent = content.question;
