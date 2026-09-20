@@ -257,8 +257,8 @@
               <button class="calendar-day has-both" type="button" data-date="2026-09-15">15</button>
               <button class="calendar-day has-reflective" type="button" data-date="2026-09-16">16</button>
               <button class="calendar-day" type="button" data-date="2026-09-17">17</button>
-              <button class="calendar-day has-fun selected" type="button" data-date="2026-09-18">18</button>
-              <button class="calendar-day today" type="button" data-date="2026-09-19">19</button>
+              <button class="calendar-day" type="button" data-date="2026-09-18">18</button>
+              <button class="calendar-day today selected" type="button" data-date="2026-09-19">19</button>
             </div>
 
             <aside class="history-detail" id="history-detail" aria-live="polite">
@@ -338,14 +338,19 @@
 
         <section class="friends-view app-view" id="friends-view" hidden aria-labelledby="friends-heading">
           <header class="friends-header">
-            <div><p class="eyebrow">Your people</p><h1 id="friends-heading">Friends</h1><p>Friends can be added to one or more circles.</p><small class="your-handle" id="your-handle">Add people by their sparKIT username.</small></div>
+            <div><p class="eyebrow">Your people</p><h1 id="friends-heading">Friends</h1><p>Friends can be added to one or more circles.</p><small class="your-handle" id="your-handle">Choose a username so friends can find you.</small></div>
             <button class="primary-button" id="add-friend-button" type="button">Add friend</button>
           </header>
+
+          <form class="profile-form" id="profile-form">
+            <div><label for="profile-username">Your username</label><small>This is how friends find you.</small></div>
+            <div><span aria-hidden="true">@</span><input id="profile-username" name="username" minlength="3" maxlength="24" pattern="[a-z0-9_]+" autocomplete="username" required /><button type="submit">Save</button></div>
+          </form>
 
           <form class="friend-search" id="friend-search-form" hidden>
             <label for="friend-username">sparKIT username</label>
             <div><input id="friend-username" name="username" placeholder="@username" required /><button type="submit">Add friend</button></div>
-            <small class="friend-setup-note">Friend requests sync across accounts when shared mode is connected.</small>
+            <small class="friend-setup-note" id="friend-setup-note">Friend requests sync across accounts when shared mode is connected.</small>
           </form>
 
           <div class="friends-grid" id="friends-grid"></div>
