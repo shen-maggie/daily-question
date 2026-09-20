@@ -10,6 +10,7 @@ const yourAnswer = document.querySelector("#your-answer");
 const privacyInputs = document.querySelectorAll('input[name="privacy"]');
 const privacyResult = document.querySelector("#privacy-result");
 const circlePrivacyLabel = document.querySelector("#circle-privacy-label");
+const circlePrivacyTitle = document.querySelector("#circle-privacy-title");
 const circlePrivacyHint = document.querySelector("#circle-privacy-hint");
 const questionHeading = document.querySelector("#question-heading");
 const dailyLabel = document.querySelector("#daily-label");
@@ -429,6 +430,8 @@ function syncCircleState() {
   document.querySelector("#today-room").hidden = !hasCircles;
   const circlePrivacy = form.querySelector('input[value="friends"]');
   circlePrivacy.disabled = !hasCircles || answerInput.disabled;
+  const activeItem = activeCircleId ? circleList.querySelector(`[data-circle="${activeCircleId}"]`) : null;
+  circlePrivacyTitle.textContent = activeItem ? `Share to ${activeItem.dataset.name}` : "My circle";
   circlePrivacyHint.textContent = hasCircles
     ? "Mutual reveal with this friend group."
     : "Create a circle to unlock this.";
