@@ -52,7 +52,7 @@ const privacyClasses = {
 };
 
 const reflectiveQuestions = [
-  { question: "Are you comfortable with who you are as a person?", followUp: "What part of yourself took the longest to accept?" },
+  { question: "If you met yourself from five years ago, what would you tell them?", followUp: "What would your younger self be proud to see?" },
   { question: "Would you rather be good and misunderstood, or admired for someone you are not?", followUp: "How much should other people's perception matter?" },
   { question: "What is a regret that still teaches you something?", followUp: "Would you make the same choice with what you knew then?" },
   { question: "Would you rather be a jack of many trades or the master of one?", followUp: "Which path feels more like the life you want?" },
@@ -62,7 +62,7 @@ const reflectiveQuestions = [
   { question: "In a room of 100 people, what could you do that nobody else could?", followUp: "How did you get unexpectedly good at it?" },
   { question: "What was the biggest turning point in your life?", followUp: "Did you recognize it as a turning point at the time?" },
   { question: "What do you see yourself doing during retirement?", followUp: "What part of that life could you begin now?" },
-  { question: "If you met yourself from five years ago, what would you tell them?", followUp: "What would your younger self be proud to see?" },
+  { question: "Are you comfortable with who you are as a person?", followUp: "What part of yourself took the longest to accept?" },
   { question: "What quote best represents your view on life?", followUp: "Has that view changed over time?" },
   { question: "Who has had the biggest impact on who you are?", followUp: "What part of them do you carry with you?" },
   { question: "What would you do with one extra hour every day?", followUp: "What currently keeps you from making time for it?" },
