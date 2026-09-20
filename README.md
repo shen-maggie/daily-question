@@ -5,6 +5,11 @@ friends. Everyone receives the same reflective and fun questions each day.
 The reflective question appears first; the fun question is one click away.
 Answering either one maintains the personal streak.
 
+The daily pair comes from curated reflective and playful question banks. The
+rotation is deterministic, so everyone receives the same questions on the same
+date. The first and last days of each month use recurring goals and reflection
+prompts, with a small number of date-specific holiday questions.
+
 Answers can be saved just for the writer or shared with one of their circles.
 There is no public response wall. Circle answers stay hidden until each member
 submits their own answer, and a circle streak continues when at least half of

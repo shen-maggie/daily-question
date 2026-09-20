@@ -131,6 +131,6 @@ create policy "authors delete messages" on public.messages for delete to authent
 alter publication supabase_realtime add table public.messages;
 
 insert into public.questions(question_date, mode, body, follow_up) values
-  (current_date, 'fun', 'If today had a movie title, what would it be?', 'Which title deserves an actual poster?'),
-  (current_date, 'reflective', 'What is something small that has made life feel lighter lately?', 'Is there one small thing we could make easier for each other this week?')
+  (current_date, 'fun', 'What was your favorite plushie as a kid?', 'What was its name and personality?'),
+  (current_date, 'reflective', 'Are you comfortable with who you are as a person?', 'What part of yourself took the longest to accept?')
 on conflict (question_date, mode) do update set body = excluded.body, follow_up = excluded.follow_up;
