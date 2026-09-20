@@ -416,7 +416,7 @@ function renderHistory(date) {
     heading.textContent = date === "2026-09-19" ? "Nothing chosen yet today." : "A quiet day.";
     const message = document.createElement("p");
     message.className = "history-empty";
-    message.textContent = date === "2026-09-19" ? "Choose either question to keep your streak going." : "You did not answer a Sidequest on this date.";
+    message.textContent = date === "2026-09-19" ? "Choose either question to keep your streak going." : "You did not answer a SparKIT question on this date.";
     fragment.append(heading, message);
   } else {
     records.forEach((record, index) => {
@@ -565,13 +565,7 @@ document.querySelector("#add-friend-button").addEventListener("click", () => {
 
 friendSearchForm.addEventListener("submit", (event) => {
   event.preventDefault();
-  const input = friendSearchForm.elements.username;
-  const username = input.value.trim();
-  if (!username) return;
-  addFriendRow(username);
-  input.value = "";
-  friendSearchForm.hidden = true;
-  showToast(`Friend request sent to ${username}`);
+  showToast("Connect shared accounts before sending friend requests");
 });
 
 form.addEventListener("submit", async (event) => {

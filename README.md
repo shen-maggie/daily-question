@@ -1,4 +1,4 @@
-# Sidequest
+# SparKIT
 
 A mobile-first daily question app for private reflection and conversations with
 friends. Everyone receives the same reflective and fun questions each day.
