@@ -48,11 +48,11 @@
             <div class="daily-choice" aria-label="Today's questions">
               <button class="choice-button active" type="button" data-mode="reflective" aria-pressed="true">
                 <span class="choice-icon" aria-hidden="true">✦</span>
-                <span><strong>Reflective question</strong><small>Start here</small></span>
+                <span><strong>Reflective Prompt</strong><small>Start here</small></span>
               </button>
               <button class="choice-button" type="button" data-mode="fun" aria-pressed="false">
                 <span class="choice-icon" aria-hidden="true">☺</span>
-                <span><strong>See the fun question</strong><small>Quick and playful →</small></span>
+                <span><strong>Fun Question</strong><small>Quick and playful →</small></span>
               </button>
             </div>
 
@@ -83,7 +83,7 @@
                   <span class="streak-kicker">Personal streak</span>
                   <strong>12 days</strong>
                 </div>
-                <p id="personal-streak-status">Answer either question to keep it going.</p>
+                <p id="personal-streak-status">Answer one of the questions to keep it going.</p>
                 <div class="streak-meter" aria-hidden="true"><span id="personal-streak-meter"></span></div>
               </article>
               <article class="streak-card circle-streak" id="today-circle-streak" hidden>
@@ -91,7 +91,7 @@
                   <span class="streak-kicker">Your circle</span>
                   <strong>6 days</strong>
                 </div>
-                <p id="group-streak-status">Streak secured · 2 of 4 answered today.</p>
+                <p id="group-streak-status">Circle streak secured · 2 of 4 answered today.</p>
                 <div class="streak-meter threshold-meter" aria-hidden="true"><span id="group-streak-meter"></span></div>
               </article>
             </div>
@@ -107,7 +107,7 @@
               ></textarea>
               <div class="form-footer">
                 <button class="primary-button" type="submit">
-                  Lock in answer <span aria-hidden="true">→</span>
+                  Save answer <span aria-hidden="true">→</span>
                 </button>
               </div>
 
@@ -119,28 +119,33 @@
                 </label>
                 <label>
                   <input type="radio" name="privacy" value="private" checked />
-                  <span><strong>Just me</strong><small>Keep it as a private note.</small></span>
+                  <span><strong>Just me</strong><small>Keep this to myself.</small></span>
                 </label>
               </fieldset>
             </form>
 
             <p class="privacy-note">
-              Circle answers unlock only after you submit your own. Choose “Just me” to keep yours private.
+              Answers from circles unlock only after you submit your own. Choose “Just me” to keep yours private.
             </p>
           </div>
 
           <aside class="reveal-panel" id="reveal-panel" aria-live="polite">
             <div class="locked-state" id="locked-state">
               <svg class="journal-illustration" viewBox="0 0 420 250" role="img" aria-label="A cat writing an answer in a notebook">
-                <path class="illustration-wash" d="M44 201c18-38 57-59 98-52 28-53 115-66 165-23 37 31 41 76 10 97H73c-27 0-41-8-29-22Z" />
                 <path class="illustration-line" d="M53 218h314" />
 
                 <path class="illustration-line" d="M116 176c-35-4-45 23-25 34 18 10 42-4 34-20-5-10-21-9-26-1" />
                 <path class="illustration-fill-pink" d="M132 128c21-22 67-20 87 7 13 18 14 51 4 76h-105c-7-31-3-64 14-83Z" />
                 <path class="illustration-fill-yellow" d="m126 65 25 15c11-7 29-7 41 0l26-15-6 38c5 30-14 51-41 51s-47-21-42-51z" />
                 <path class="illustration-line" d="m126 65 25 15c11-7 29-7 41 0l26-15-6 38c5 30-14 51-41 51s-47-21-42-51z" />
-                <path class="illustration-line" d="M146 104c3-3 7-3 10 0M187 104c3-3 7-3 10 0M168 114l5 4-5 4M168 122c-6 6-13 5-17 1M173 122c6 6 13 5 17 1M136 113l-31-5M136 122l-32 5M206 113l30-5M205 122l32 5" />
+                <path class="illustration-detail-pink" d="m132 75 17 11-20 10zM211 75l-17 11 19 10z" />
+                <path class="illustration-line" d="M144 101c4-5 11-5 15 0M184 101c4-5 11-5 15 0M168 114l5 4-5 4M168 122c-6 6-13 5-17 1M173 122c6 6 13 5 17 1M136 113l-31-5M136 122l-32 5M206 113l30-5M205 122l32 5M158 82l4 9M171 79v11M185 82l-4 9" />
+                <circle class="illustration-ink" cx="151" cy="103" r="3" />
+                <circle class="illustration-ink" cx="192" cy="103" r="3" />
+                <circle class="illustration-detail-pink" cx="145" cy="116" r="4" />
+                <circle class="illustration-detail-pink" cx="198" cy="116" r="4" />
                 <path class="illustration-line" d="M147 143c-15 9-22 26-18 43M201 142c16 7 24 23 22 41" />
+                <path class="illustration-line" d="M150 143c13 8 29 9 43 0M158 147l3 10M184 147l-3 10" />
 
                 <path class="illustration-fill-paper" d="m105 172 65-10 7 47-67 8z" />
                 <path class="illustration-fill-paper" d="m170 162 67 10-5 45-55-8z" />
@@ -252,8 +257,8 @@
               <button class="calendar-day has-both" type="button" data-date="2026-09-15">15</button>
               <button class="calendar-day has-reflective" type="button" data-date="2026-09-16">16</button>
               <button class="calendar-day" type="button" data-date="2026-09-17">17</button>
-              <button class="calendar-day has-fun selected" type="button" data-date="2026-09-18">18</button>
-              <button class="calendar-day today" type="button" data-date="2026-09-19">19</button>
+              <button class="calendar-day" type="button" data-date="2026-09-18">18</button>
+              <button class="calendar-day today selected" type="button" data-date="2026-09-19">19</button>
             </div>
 
             <aside class="history-detail" id="history-detail" aria-live="polite">
@@ -312,7 +317,6 @@
             <section class="circle-conversation" aria-labelledby="circle-chat-heading">
               <header class="conversation-header">
                 <div><p class="eyebrow">Circle chat</p><h3 id="circle-chat-heading">Today’s conversation</h3></div>
-                <span class="presence"><i aria-hidden="true"></i> 3 active now</span>
               </header>
               <div class="chat-day"><span>Today</span></div>
               <div class="room-messages circle-page-messages" data-room-messages="active"></div>
@@ -334,9 +338,14 @@
 
         <section class="friends-view app-view" id="friends-view" hidden aria-labelledby="friends-heading">
           <header class="friends-header">
-            <div><p class="eyebrow">Your people</p><h1 id="friends-heading">Friends</h1><p>Friends can be added to one or more circles.</p></div>
+            <div><p class="eyebrow">Your people</p><h1 id="friends-heading">Friends</h1><p>Friends can be added to one or more circles.</p><small class="your-handle" id="your-handle">Choose a username so friends can find you.</small></div>
             <button class="primary-button" id="add-friend-button" type="button">Add friend</button>
           </header>
+
+          <form class="profile-form" id="profile-form">
+            <div><label for="profile-username">Your username</label><small>This is how friends find you.</small></div>
+            <div><span aria-hidden="true">@</span><input id="profile-username" name="username" minlength="3" maxlength="24" pattern="[a-z0-9_]+" autocomplete="username" required /><button type="submit">Save</button></div>
+          </form>
 
           <form class="friend-search" id="friend-search-form" hidden>
             <label for="friend-username">sparKIT username</label>
@@ -344,20 +353,7 @@
             <small class="friend-setup-note">Username requests will turn on when shared accounts are connected.</small>
           </form>
 
-          <div class="friends-grid" id="friends-grid">
-            <article class="friend-row" data-friend="Jamie">
-              <span class="face face-yellow">J</span><div><strong>Jamie Kim</strong><small>@jamiek · 2 circles</small></div><span class="friend-status answered">Answered today</span><button class="more-button" type="button" aria-label="More options for Jamie">•••</button>
-            </article>
-            <article class="friend-row" data-friend="Alex">
-              <span class="face face-blue">A</span><div><strong>Alex Morgan</strong><small>@alexm · 1 circle</small></div><span class="friend-status answered">Answered today</span><button class="more-button" type="button" aria-label="More options for Alex">•••</button>
-            </article>
-            <article class="friend-row" data-friend="Maya">
-              <span class="face face-pink">M</span><div><strong>Maya Patel</strong><small>@mayap · 2 circles</small></div><span class="friend-status">Not yet</span><button class="more-button" type="button" aria-label="More options for Maya">•••</button>
-            </article>
-            <article class="friend-row" data-friend="Noah">
-              <span class="face face-green">N</span><div><strong>Noah Chen</strong><small>@noahc · 1 circle</small></div><span class="friend-status">Not yet</span><button class="more-button" type="button" aria-label="More options for Noah">•••</button>
-            </article>
-          </div>
+          <div class="friends-grid" id="friends-grid"></div>
         </section>
       </main>
 
@@ -375,10 +371,6 @@
           <input id="circle-name" name="circleName" placeholder="Sunday dinner, college friends..." maxlength="40" required />
           <fieldset class="friend-picker">
             <legend>Choose friends</legend>
-            <label><input type="checkbox" name="members" value="Jamie" /><span class="face face-yellow">J</span><span><strong>Jamie Kim</strong><small>@jamiek</small></span></label>
-            <label><input type="checkbox" name="members" value="Alex" /><span class="face face-blue">A</span><span><strong>Alex Morgan</strong><small>@alexm</small></span></label>
-            <label><input type="checkbox" name="members" value="Maya" /><span class="face face-pink">M</span><span><strong>Maya Patel</strong><small>@mayap</small></span></label>
-            <label><input type="checkbox" name="members" value="Noah" /><span class="face face-green">N</span><span><strong>Noah Chen</strong><small>@noahc</small></span></label>
           </fieldset>
           <p class="form-error" id="circle-form-error" hidden>Choose at least one friend.</p>
           <button class="primary-button dialog-submit" value="default" type="submit">Create circle</button>
