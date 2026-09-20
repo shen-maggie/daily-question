@@ -9,6 +9,8 @@ const revealedState = document.querySelector("#revealed-state");
 const yourAnswer = document.querySelector("#your-answer");
 const privacyInputs = document.querySelectorAll('input[name="privacy"]');
 const privacyResult = document.querySelector("#privacy-result");
+const circlePrivacyLabel = document.querySelector("#circle-privacy-label");
+const circlePrivacyHint = document.querySelector("#circle-privacy-hint");
 const questionHeading = document.querySelector("#question-heading");
 const dailyLabel = document.querySelector("#daily-label");
 const worldNote = document.querySelector("#world-note");
@@ -369,6 +371,9 @@ function syncCircleState() {
   document.querySelector("#today-room").hidden = !hasCircles;
   const circlePrivacy = form.querySelector('input[value="friends"]');
   circlePrivacy.disabled = !hasCircles || answerInput.disabled;
+  circlePrivacyHint.textContent = hasCircles
+    ? "Mutual reveal with this friend group."
+    : "Create a circle to unlock this.";
 }
 
 function addFriendRow(username) {
@@ -516,6 +521,13 @@ document.querySelector("#new-circle-button").addEventListener("click", () => {
 });
 
 document.querySelector("#empty-create-circle").addEventListener("click", () => {
+  document.querySelector("#new-circle-button").click();
+});
+
+circlePrivacyLabel.addEventListener("click", (event) => {
+  if (!circlePrivacyLabel.querySelector('input[name="privacy"]').disabled) return;
+  event.preventDefault();
+  window.location.hash = "#circles";
   document.querySelector("#new-circle-button").click();
 });
 
