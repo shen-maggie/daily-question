@@ -5,7 +5,9 @@
   --acid: #f2dc6d;
   --blue: #9dbfe8;
   --blue-soft: #dfeaf3;
+  --blue-mellow: #cfe3f5;
   --pink: #ef9c8f;
+  --pink-cotton: #ffd3ea;
   --green: #99c7ad;
   --line: #c9cbc2;
   --soft: #f2eee5;
@@ -365,7 +367,10 @@ textarea:focus { box-shadow: inset 0 -3px 0 var(--acid); }
   padding: clamp(36px, 6vw, 88px);
   display: grid;
   align-items: center;
+  transition: background-color 0.3s ease;
 }
+.reveal-panel.mode-fun { background: var(--pink-cotton); }
+.reveal-panel.mode-reflective { background: var(--blue-mellow); }
 .locked-state { max-width: 520px; }
 .journal-illustration { width: min(100%, 440px); height: auto; margin: 0 0 12px; overflow: visible; }
 .illustration-line { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
