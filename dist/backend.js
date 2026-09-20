@@ -105,6 +105,16 @@
     return { ...target, status: "pending" };
   }
 
+  async function updateUsername(nextUsername) {
+    if (!configured) return nextUsername;
+    const { data, error } = await client.from("profiles")
+      .update({ username: nextUsername }).eq("id", user.id).select("username").single();
+    if (error) throw error;
+    username = data.username;
+    localStorage.setItem("sparkit-username", username);
+    return username;
+  }
+
   async function loadFriends() {
     if (!configured) return [];
     const { data: requests, error } = await client.from("friend_requests")
@@ -202,6 +212,7 @@
     createCircle,
     joinCircle,
     sendFriendRequest,
+    updateUsername,
     loadFriends,
     acceptFriendRequest,
     saveAnswer,

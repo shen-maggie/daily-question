@@ -40,6 +40,9 @@ const friendSearchForm = document.querySelector("#friend-search-form");
 const friendsGrid = document.querySelector("#friends-grid");
 const viewCircleAnswers = document.querySelector("#view-circle-answers");
 const answerGate = document.querySelector("#answer-gate");
+const profileForm = document.querySelector("#profile-form");
+const profileUsername = document.querySelector("#profile-username");
+const friendSetupNote = document.querySelector("#friend-setup-note");
 
 const privacyLabels = {
   friends: "My circle",
@@ -142,7 +145,7 @@ const dailyModes = {
   },
 };
 
-const historyRecords = {
+const demoHistoryRecords = {
   "2026-09-18": [
     { mode: "fun", privacy: "friends", question: "What tiny inconvenience would you permanently delete from the world?", answer: "Fitted sheets. No object should be that smug and that hard to fold.", shared: "Shared with friends · 3 replies" },
   ],
@@ -182,6 +185,13 @@ const historyRecords = {
     { mode: "fun", privacy: "friends", question: "What would your warning label say?", answer: "Will reorganize your bookshelf without permission.", shared: "Shared with friends · 4 replies" },
   ],
 };
+
+let historyRecords;
+try {
+  historyRecords = JSON.parse(localStorage.getItem("sparkit-answer-history-v1") || "{}") || {};
+} catch {
+  historyRecords = {};
+}
 
 let circleMessages;
 try {
@@ -230,6 +240,11 @@ function getTodayRecords() {
       shared: saved.privacy === "private" ? "Saved just for you" : "Shared with your circle",
     }];
   });
+}
+
+function saveTodayToHistory() {
+  historyRecords[todayKey] = getTodayRecords();
+  localStorage.setItem("sparkit-answer-history-v1", JSON.stringify(historyRecords));
 }
 
 function hasCompletedToday() {
@@ -395,9 +410,18 @@ async function refreshSharedMessages() {
 }
 
 async function startBackend() {
-  if (!window.sidequestBackend?.enabled) return;
+  const localUsername = localStorage.getItem("sparkit-username")
+    || `spark_${crypto.randomUUID().replaceAll("-", "").slice(0, 8)}`;
+  localStorage.setItem("sparkit-username", localUsername);
+  profileUsername.value = localUsername;
+  document.querySelector("#your-handle").textContent = `Your username: @${localUsername}`;
+  if (!window.sidequestBackend?.enabled) {
+    friendSetupNote.textContent = "Demo mode: friends added here stay on this device until Supabase is connected.";
+    return;
+  }
   try {
     const state = await window.sidequestBackend.init();
+    profileUsername.value = state.username;
     document.querySelector("#your-handle").textContent = `Your username: @${state.username}`;
     const sharedFriends = await window.sidequestBackend.loadFriends();
     friendsGrid.replaceChildren();
@@ -523,7 +547,7 @@ function badge(text, className) {
 }
 
 function renderHistory(date) {
-  const records = date === "2026-09-19" ? getTodayRecords() : (historyRecords[date] || []);
+  const records = date === todayKey ? getTodayRecords() : (historyRecords[date] || []);
   const formattedDate = new Date(`${date}T12:00:00`).toLocaleDateString("en-US", {
     weekday: "long", month: "long", day: "numeric",
   });
@@ -536,10 +560,10 @@ function renderHistory(date) {
 
   if (!records.length) {
     const heading = document.createElement("h2");
-    heading.textContent = date === "2026-09-19" ? "Nothing chosen yet today." : "A quiet day.";
+    heading.textContent = date === todayKey ? "Nothing chosen yet today." : "A quiet day.";
     const message = document.createElement("p");
     message.className = "history-empty";
-    message.textContent = date === "2026-09-19" ? "Choose either question to keep your streak going." : "You did not answer a sparKIT question on this date.";
+    message.textContent = date === todayKey ? "Choose either question to keep your streak going." : "You did not answer a sparKIT question on this date.";
     fragment.append(heading, message);
   } else {
     records.forEach((record, index) => {
@@ -568,11 +592,21 @@ function renderHistory(date) {
 }
 
 function updateTodayCalendar() {
-  const today = document.querySelector('[data-date="2026-09-19"]');
+  const today = document.querySelector(`[data-date="${todayKey}"]`);
+  if (!today) return;
   const records = getTodayRecords();
   today.classList.remove("has-fun", "has-reflective", "has-both");
   if (records.length === 2) today.classList.add("has-both");
   else if (records[0]) today.classList.add(`has-${records[0].mode}`);
+}
+
+function updateHistoryCalendar() {
+  calendarDays.forEach((day) => {
+    const records = day.dataset.date === todayKey ? getTodayRecords() : (historyRecords[day.dataset.date] || []);
+    day.classList.remove("has-fun", "has-reflective", "has-both");
+    if (records.length > 1) day.classList.add("has-both");
+    else if (records[0]) day.classList.add(`has-${records[0].mode}`);
+  });
 }
 
 function renderRoute() {
@@ -587,8 +621,8 @@ function renderRoute() {
     link.classList.toggle("active", link.getAttribute("href") === route);
   });
   if (route === "#history") {
-    updateTodayCalendar();
-    renderHistory(document.querySelector(".calendar-day.selected")?.dataset.date || "2026-09-18");
+    updateHistoryCalendar();
+    renderHistory(document.querySelector(".calendar-day.selected")?.dataset.date || todayKey);
   }
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -721,6 +755,27 @@ friendSearchForm.addEventListener("submit", async (event) => {
   showToast(window.sidequestBackend?.enabled ? `Request sent to @${username}` : `@${username} added on this device`);
 });
 
+profileForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const username = profileUsername.value.trim().replace(/^@/, "").toLowerCase();
+  if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+    showToast("Use 3–24 letters, numbers, or underscores");
+    return;
+  }
+  try {
+    const savedUsername = window.sidequestBackend?.enabled
+      ? await window.sidequestBackend.updateUsername(username)
+      : username;
+    localStorage.setItem("sparkit-username", savedUsername);
+    profileUsername.value = savedUsername;
+    document.querySelector("#your-handle").textContent = `Your username: @${savedUsername}`;
+    showToast(`Username saved as @${savedUsername}`);
+  } catch (error) {
+    console.error("Username update failed", error);
+    showToast(error.code === "23505" ? "That username is already taken" : "Could not save that username");
+  }
+});
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const answer = answerInput.value.trim();
@@ -728,6 +783,7 @@ form.addEventListener("submit", async (event) => {
   const privacy = form.elements.privacy.value;
   localStorage.setItem(storageKey("answer"), answer);
   localStorage.setItem(storageKey("privacy"), privacy);
+  saveTodayToHistory();
   showCompleted(answer, privacy);
   renderStreaks();
   updateTodayCalendar();
@@ -747,6 +803,7 @@ window.addEventListener("hashchange", renderRoute);
 
 renderMode(activeMode);
 updateTodayCalendar();
+updateHistoryCalendar();
 customCircles.forEach((circle) => circleList.append(makeCircleListItem(circle)));
 addedFriends.forEach(addFriendRow);
 if (circleList.firstElementChild) circleList.firstElementChild.click();
