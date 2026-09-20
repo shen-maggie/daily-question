@@ -3,6 +3,7 @@
   const configured = Boolean(config.supabaseUrl && config.supabaseAnonKey && window.supabase);
   let client = null;
   let user = null;
+  let username = null;
   let circleId = null;
   let inviteCode = null;
   let channel = null;
@@ -27,8 +28,12 @@
 
   async function ensureProfile() {
     const displayName = localStorage.getItem("sidequest-display-name") || config.displayName || "You";
-    const { error } = await client.from("profiles").upsert({ id: user.id, display_name: displayName });
+    username = localStorage.getItem("sparkit-username")
+      || config.username
+      || `spark_${user.id.replaceAll("-", "").slice(0, 8)}`;
+    const { error } = await client.from("profiles").upsert({ id: user.id, display_name: displayName, username });
     if (error) throw error;
+    localStorage.setItem("sparkit-username", username);
   }
 
   async function findCircle() {
@@ -72,7 +77,64 @@
       circleName = data?.name || null;
       inviteCode = data?.invite_code || inviteCode;
     }
-    return { enabled: true, userId: user.id, circleId, circleName, inviteCode };
+    return { enabled: true, userId: user.id, username, circleId, circleName, inviteCode };
+  }
+
+  async function sendFriendRequest(targetUsername) {
+    if (!configured) return null;
+    const { data: target, error: targetError } = await client.from("profiles")
+      .select("id,username,display_name").ilike("username", targetUsername).single();
+    if (targetError || !target) throw new Error("User not found");
+    if (target.id === user.id) throw new Error("You cannot add yourself");
+
+    const { data: existing } = await client.from("friend_requests")
+      .select("id,sender_id,recipient_id,status")
+      .or(`and(sender_id.eq.${user.id},recipient_id.eq.${target.id}),and(sender_id.eq.${target.id},recipient_id.eq.${user.id})`)
+      .maybeSingle();
+    if (existing) {
+      if (existing.status === "pending" && existing.recipient_id === user.id) {
+        await acceptFriendRequest(existing.id);
+        return { ...target, status: "accepted" };
+      }
+      return { ...target, status: existing.status };
+    }
+
+    const { error } = await client.from("friend_requests")
+      .insert({ sender_id: user.id, recipient_id: target.id });
+    if (error) throw error;
+    return { ...target, status: "pending" };
+  }
+
+  async function loadFriends() {
+    if (!configured) return [];
+    const { data: requests, error } = await client.from("friend_requests")
+      .select("id,sender_id,recipient_id,status")
+      .or(`sender_id.eq.${user.id},recipient_id.eq.${user.id}`)
+      .order("created_at");
+    if (error) throw error;
+    const ids = [...new Set(requests.map((request) => request.sender_id === user.id ? request.recipient_id : request.sender_id))];
+    if (!ids.length) return [];
+    const { data: profiles, error: profilesError } = await client.from("profiles")
+      .select("id,username,display_name").in("id", ids);
+    if (profilesError) throw profilesError;
+    const profileById = Object.fromEntries(profiles.map((profile) => [profile.id, profile]));
+    return requests.map((request) => {
+      const otherId = request.sender_id === user.id ? request.recipient_id : request.sender_id;
+      return {
+        ...profileById[otherId],
+        requestId: request.id,
+        status: request.status,
+        incoming: request.recipient_id === user.id,
+      };
+    }).filter((friend) => friend.username);
+  }
+
+  async function acceptFriendRequest(requestId) {
+    if (!configured) return null;
+    const { data, error } = await client.from("friend_requests")
+      .update({ status: "accepted" }).eq("id", requestId).eq("recipient_id", user.id).select().single();
+    if (error) throw error;
+    return data;
   }
 
   async function createCircle(name) {
@@ -139,6 +201,9 @@
     init,
     createCircle,
     joinCircle,
+    sendFriendRequest,
+    loadFriends,
+    acceptFriendRequest,
     saveAnswer,
     loadMessages,
     sendMessage,

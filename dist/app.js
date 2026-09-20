@@ -67,6 +67,14 @@ const reflectiveQuestions = [
   { question: "Who has had the biggest impact on who you are?", followUp: "What part of them do you carry with you?" },
   { question: "What would you do with one extra hour every day?", followUp: "What currently keeps you from making time for it?" },
   { question: "What are you most proud of becoming better at?", followUp: "Who noticed the change before you did?" },
+  { question: "Why did you last cry?", followUp: "Did anything feel different afterward?" },
+  { question: "Who has had the biggest impact on you in the past year?", followUp: "What did they change for you?" },
+  { question: "How do you think AI will affect your life going forward?", followUp: "What part feels exciting, and what part worries you?" },
+  { question: "What is an app you wish existed in your life?", followUp: "What is the one thing it would do perfectly?" },
+  { question: "What book, show, or movie has impacted you the most?", followUp: "Did it change what you believe or how you behave?" },
+  { question: "How have your parents or guardians shaped who you are today?", followUp: "What did you keep, and what did you choose differently?" },
+  { question: "What is one thing you would change about yourself?", followUp: "What might you lose if it changed?" },
+  { question: "What is something you changed about yourself that you wish you had not?", followUp: "Is there a part of it you could reclaim?" },
 ];
 
 const funQuestions = [
@@ -84,6 +92,7 @@ const funQuestions = [
   { question: "Would you rather learn a new language or master a new skill?", followUp: "Which language or skill are you choosing?" },
   { question: "What are you genuinely in the top 1% at?", followUp: "What would the competition look like?" },
   { question: "Would you rather sneeze glitter or hiccup bubbles?", followUp: "Which one becomes more annoying after a week?" },
+  { question: "Who is winning the next Super Bowl?", followUp: "Give one completely serious reason and one ridiculous reason." },
 ];
 
 const today = new Date();
@@ -92,6 +101,11 @@ const dayIndex = Math.floor(Date.UTC(today.getFullYear(), today.getMonth(), toda
 const lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
 
 function questionForToday(bank, mode) {
+  if (todayKey === "2026-09-19") {
+    return mode === "reflective"
+      ? { question: "If you met yourself from five years ago, what would you tell them?", followUp: "What would your younger self be proud to see?" }
+      : { question: "What was your favorite plushie as a kid?", followUp: "What was its name and personality?" };
+  }
   if (mode === "reflective" && today.getDate() === 1) {
     return { question: "What are your goals for this month?", followUp: "Which one would feel most meaningful to finish?" };
   }
@@ -182,6 +196,13 @@ try {
   customCircles = JSON.parse(localStorage.getItem("sidequest-custom-circles") || "[]");
 } catch {
   customCircles = [];
+}
+
+let addedFriends;
+try {
+  addedFriends = JSON.parse(localStorage.getItem("sparkit-added-friends") || "[]");
+} catch {
+  addedFriends = [];
 }
 
 let activeMode = "reflective";
@@ -377,6 +398,11 @@ async function startBackend() {
   if (!window.sidequestBackend?.enabled) return;
   try {
     const state = await window.sidequestBackend.init();
+    document.querySelector("#your-handle").textContent = `Your username: @${state.username}`;
+    const sharedFriends = await window.sidequestBackend.loadFriends();
+    friendsGrid.replaceChildren();
+    createCircleForm.querySelector(".friend-picker").replaceChildren(createCircleForm.querySelector(".friend-picker legend"));
+    sharedFriends.forEach(addFriendRow);
     if (state.circleId) {
       activeCircleId = state.circleId;
       circleMessages[activeCircleId] ||= [];
@@ -425,29 +451,68 @@ function syncCircleState() {
   circlePrivacy.disabled = !hasCircles || answerInput.disabled;
 }
 
-function addFriendRow(username) {
-  const cleanName = username.replace(/^@/, "");
+function addFriendRow(friend) {
+  const cleanName = friend.username.replace(/^@/, "");
+  if (friendsGrid.querySelector(`[data-username="${CSS.escape(cleanName)}"]`)) return;
   const row = document.createElement("article");
   row.className = "friend-row";
+  row.dataset.username = cleanName;
   const avatar = document.createElement("span");
   avatar.className = "face face-green";
   avatar.textContent = cleanName.charAt(0).toUpperCase();
   const copy = document.createElement("div");
   const name = document.createElement("strong");
-  name.textContent = cleanName;
+  name.textContent = friend.displayName || cleanName;
   const handle = document.createElement("small");
-  handle.textContent = `@${cleanName} · Request sent`;
+  handle.textContent = `@${cleanName}`;
   copy.append(name, handle);
   const status = document.createElement("span");
   status.className = "friend-status";
-  status.textContent = "Pending";
+  const isIncoming = friend.status === "pending" && friend.incoming;
+  status.textContent = friend.status === "accepted" ? "Friend" : (isIncoming ? "Wants to add you" : (friend.status || "Added"));
   const more = document.createElement("button");
   more.className = "more-button";
   more.type = "button";
   more.setAttribute("aria-label", `More options for ${cleanName}`);
   more.textContent = "•••";
+  if (isIncoming && window.sidequestBackend?.enabled) {
+    more.className = "friend-accept-button";
+    more.setAttribute("aria-label", `Accept @${cleanName}`);
+    more.textContent = "Accept";
+    more.addEventListener("click", async () => {
+      try {
+        await window.sidequestBackend.acceptFriendRequest(friend.requestId);
+        friend.status = "accepted";
+        friend.incoming = false;
+        row.remove();
+        addFriendRow(friend);
+        showToast(`You and @${cleanName} are now friends`);
+      } catch (error) {
+        console.error("Accept friend failed", error);
+        showToast("Could not accept that request");
+      }
+    });
+  }
   row.append(avatar, copy, status, more);
   friendsGrid.prepend(row);
+
+  const picker = createCircleForm.querySelector(".friend-picker");
+  if ((friend.status === "accepted" || !window.sidequestBackend?.enabled) && !picker.querySelector(`input[value="${CSS.escape(cleanName)}"]`)) {
+    const option = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "members";
+    checkbox.value = cleanName;
+    const face = avatar.cloneNode(true);
+    const optionCopy = document.createElement("span");
+    const optionName = document.createElement("strong");
+    optionName.textContent = friend.displayName || cleanName;
+    const optionHandle = document.createElement("small");
+    optionHandle.textContent = `@${cleanName}`;
+    optionCopy.append(optionName, optionHandle);
+    option.append(checkbox, face, optionCopy);
+    picker.append(option);
+  }
 }
 
 function badge(text, className) {
@@ -621,9 +686,39 @@ document.querySelector("#add-friend-button").addEventListener("click", () => {
   if (!friendSearchForm.hidden) document.querySelector("#friend-username").focus();
 });
 
-friendSearchForm.addEventListener("submit", (event) => {
+friendSearchForm.addEventListener("submit", async (event) => {
   event.preventDefault();
-  showToast("Connect shared accounts before sending friend requests");
+  const input = friendSearchForm.elements.username;
+  const username = input.value.trim().replace(/^@/, "").toLowerCase();
+  if (!/^[a-z0-9_]{3,24}$/.test(username)) {
+    showToast("Use 3–24 letters, numbers, or underscores");
+    return;
+  }
+
+  let friend = { username, displayName: username, status: "Added on this device" };
+  if (window.sidequestBackend?.enabled) {
+    try {
+      const sharedFriend = await window.sidequestBackend.sendFriendRequest(username);
+      friend = {
+        username: sharedFriend.username,
+        displayName: sharedFriend.display_name,
+        status: sharedFriend.status === "accepted" ? "accepted" : "Request sent",
+      };
+    } catch (error) {
+      console.error("Friend request failed", error);
+      showToast(error.message?.includes("not found") ? "No sparKIT user has that username" : "Could not send that request");
+      return;
+    }
+  }
+
+  addFriendRow(friend);
+  if (!addedFriends.some((item) => item.username === friend.username)) {
+    addedFriends.push(friend);
+    localStorage.setItem("sparkit-added-friends", JSON.stringify(addedFriends));
+  }
+  input.value = "";
+  friendSearchForm.hidden = true;
+  showToast(window.sidequestBackend?.enabled ? `Request sent to @${username}` : `@${username} added on this device`);
 });
 
 form.addEventListener("submit", async (event) => {
@@ -653,6 +748,7 @@ window.addEventListener("hashchange", renderRoute);
 renderMode(activeMode);
 updateTodayCalendar();
 customCircles.forEach((circle) => circleList.append(makeCircleListItem(circle)));
+addedFriends.forEach(addFriendRow);
 if (circleList.firstElementChild) circleList.firstElementChild.click();
 syncCircleState();
 renderMessages();

@@ -8,8 +8,9 @@ mode until the two public Supabase values are configured.
 
 1. Create a free project at <https://supabase.com/dashboard>.
 2. Open **Authentication > Providers > Anonymous Sign-Ins** and enable it.
-3. Open **SQL Editor**, paste all of
-   `supabase/migrations/001_sidequest.sql`, and run it once.
+3. Open **SQL Editor** and run the migrations in order: first
+   `supabase/migrations/001_sidequest.sql`, then
+   `supabase/migrations/002_friends.sql`.
 4. Open **Project Settings > API** and copy the project URL and publishable
    `anon` key. Never use the `service_role` key in this website.
 
@@ -42,6 +43,7 @@ Then commit `dist/config.js`, push, and redeploy the site.
 
 - Anonymous Supabase Auth sessions
 - User profiles
+- Searchable usernames, friend requests, and accepting friends
 - Circle creation and invite-code joining
 - Daily fun and reflective questions
 - Answer persistence and answer-before-reveal Row Level Security
@@ -50,7 +52,7 @@ Then commit `dist/config.js`, push, and redeploy the site.
 
 ## Next Integration Work
 
-The current UI still displays sample data in parts of History and Friends.
-After the two-browser smoke test, replace those samples with queries from
-`answers` and `profiles`. Do not add notifications or production email
-authentication until the shared answer and message loop is stable.
+The current UI still displays sample data in parts of History. After the
+two-browser smoke test, replace those samples with queries from `answers`.
+Do not add notifications or production email authentication until the shared
+answer and message loop is stable.
